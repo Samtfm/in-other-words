@@ -29,15 +29,19 @@ Inspired by [visuwords](https://visuwords.com/) with the following modifications
   - webpack
 
 # scripts
-`word.js` this class will hold the word and it's physics properties.
-`api_util.js` this script will be responsible for making dictionary requests.
-`word_cloud.js` the WordCloud will hold many words, and update their velocities based on their collisions. On clicks, this script will call an api request of the appropriate word.
-`main.js` handle logic for
- - clearing the board
- - updating the canvas
+`word.js`: this class will hold the word and it's physics properties.
+
+`api_util.js`: this script will be responsible for making dictionary requests.
+
+`word_cloud.js`: the WordCloud will hold many words, and update their velocities based on their collisions. On clicks, this script will call an api request of the appropriate word.
+
+`main.js`: this script will handle logic for clearing the board and updating the canvas
 
 # Implementation Timeline
 Day 1: draw words to canvas as movable objects
+
 Day 2: implement physics to spread words apart
+
 Day 3: Integrate API calls to fetch new words
+
 Day 4: Add css styling to interface. Add visual effects to words.
