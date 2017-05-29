@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -72,6 +72,39 @@
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Board = function Board(ctx) {
+  _classCallCheck(this, Board);
+
+  console.log("HEY I'M A BOARD");
+};
+
+exports.default = Board;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Board = __webpack_require__(0);
+
+document.addEventListener("DOMContentLoaded", function () {
+  var canvasEl = document.getElementById("canvas");
+  canvasEl.width = 400;
+  canvasEl.height = 200;
+
+  var ctx = canvasEl.getContext("2d");
+
+  var board = new Board(ctx);
+});
 
 /***/ })
 /******/ ]);
