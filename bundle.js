@@ -75,10 +75,22 @@
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var Word = __webpack_require__(2);
+
 var Board = function Board(ctx) {
+  var _this = this;
+
   _classCallCheck(this, Board);
 
-  console.log("HEY I'M A BOARD");
+  this.words = [new Word('happy', 20, 20)];
+  var i = 1;
+  setInterval(function () {
+    ctx.clearRect(0, 0, 400, 400);
+    _this.words.forEach(function (word) {
+      word.move();
+      word.render(ctx);
+    });
+  }, 1000);
 };
 
 module.exports = Board;
@@ -101,6 +113,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var board = new Board(ctx);
 });
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Word = function () {
+  function Word(text, x, y) {
+    _classCallCheck(this, Word);
+
+    this.text = text;
+    this.posx = x;
+    this.posy = y;
+    this.velx = 5;
+    this.vely = 3;
+  }
+
+  _createClass(Word, [{
+    key: 'render',
+    value: function render(ctx) {
+      ctx.font = '10pt sans-serif';
+      console.log(ctx.measureText(this.text));
+      this.width = ctx.measureText(this.text).width;
+      this.height = 10;
+      ctx.fillStyle = 'black';
+
+      ctx.fillText(this.text, this.posx - this.width / 2, this.posy + this.height / 2);
+      ctx.fillStyle = 'red';
+      ctx.fillRect(this.posx, this.posy, 3, 3);
+    }
+  }, {
+    key: 'move',
+    value: function move() {
+      this.posx += this.velx;
+      this.posy += this.vely;
+    }
+  }]);
+
+  return Word;
+}();
+
+module.exports = Word;
 
 /***/ })
 /******/ ]);
