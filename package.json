@@ -1,0 +1,30 @@
+{
+  "name": "in-other-words",
+  "version": "1.0.0",
+  "description": "In Other Words is a tool for writing and coming up with ideas. Starting with a random word (or one of their choosing), users will be able to fetch more related words from each word they click on.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samtfm/in-other-words.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Samtfm/in-other-words/issues"
+  },
+  "homepage": "https://github.com/Samtfm/in-other-words#readme",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^2.6.1"
+  }
+}
