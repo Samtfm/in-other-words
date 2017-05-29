@@ -73,10 +73,6 @@
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Board = function Board(ctx) {
@@ -85,7 +81,7 @@ var Board = function Board(ctx) {
   console.log("HEY I'M A BOARD");
 };
 
-exports.default = Board;
+module.exports = Board;
 
 /***/ }),
 /* 1 */
@@ -95,7 +91,7 @@ exports.default = Board;
 
 
 var Board = __webpack_require__(0);
-
+console.log(Board);
 document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementById("canvas");
   canvasEl.width = 400;

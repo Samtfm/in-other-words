@@ -1,5 +1,5 @@
 const Board = require("./board.js");
-
+console.log(Board);
 document.addEventListener("DOMContentLoaded", function(){
   const canvasEl = document.getElementById("canvas");
   canvasEl.width = 400;

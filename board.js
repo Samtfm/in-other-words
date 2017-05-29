@@ -3,4 +3,4 @@ class Board{
     console.log("HEY I'M A BOARD");
   }
 }
-export default Board;
+module.exports = Board;
