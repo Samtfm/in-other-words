@@ -1,30 +1,58 @@
 const Word = require('./word.js');
 
 class Board{
-  constructor(ctx, width, height){
-    this.width = width;
-    this.height = height;
+  constructor(canvas){
+    this.width = canvas.width;
+    this.height = canvas.height;
+    this.ctx = canvas.getContext("2d");
     this.words = [];
-    for (var i = 0; i < 65; i++) {
+    this.rect = canvas.getBoundingClientRect();
+    canvas.onmousemove = this.onMouseMove.bind(this);
+    canvas.onmousedown = this.startDrag.bind(this);
+    this.heldWord = null;
+    document.addEventListener("mouseup", this.endDrag.bind(this));
+
+    for (var i = 0; i < 1; i++) {
       let word = new Word(
         `worrrddd${i}`,
         Math.random()*this.width,
         Math.random()*this.height,
-        ctx);
+        this.ctx);
       this.words.push(word);
     }
     console.log(this.width);
     let times = 0;
     let ticker = setInterval( () => {
-      ctx.clearRect(0,0, 400,400);
+      this.ctx.clearRect(0,0, 400,400);
       this.updateVelocities();
       this.updatePositions();
-      this.renderAll(ctx);
+      this.renderAll(this.ctx);
       if (times > 60) {
         clearInterval(ticker);
       }
       times++;
     }, 40);
+  }
+
+  startDrag(e){
+    const x = e.clientX - this.rect.left;
+    const y = e.clientY - this.rect.top;
+    for (let i = 0; i < this.words.length; i++) {
+      const word = this.words[i];
+
+      console.log(x, y, word.pos.x, word.pos.y);
+      if (word.hitTest(x, y)){
+        this.heldWord = word;
+        break;
+      }
+    }
+    console.log(this.heldWord);
+  }
+  onMouseMove(e){
+
+  }
+  endDrag(e){
+
   }
 
   updateVelocities(){

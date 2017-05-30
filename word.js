@@ -1,5 +1,5 @@
-const MIN_SPEED = 0.01;
-const FRICTION = 0.1;
+const MIN_SPEED = 0.001;
+const FRICTION = 0.3;
 const PADDING = 4;
 class Word{
   constructor(text, x, y, ctx){
@@ -20,6 +20,7 @@ class Word{
     ctx.fillStyle = 'red';
     ctx.fillRect(this.pos.x + this.width/2, this.pos.y - this.height/2, 3, 3);
   }
+
   move(){
     this.pos.x += this.vel.x;
     this.pos.y += this.vel.y;
@@ -32,7 +33,7 @@ class Word{
     }
   }
 
-  isInBounds(x, y){
+  hitTest(x, y){
     return (
       x >= this.pos.x && x <= this.pos.x + this.width &&
       y >= this.pos.y && y <= this.pos.y + this.height
@@ -56,21 +57,23 @@ class Word{
       const thisBottom = this.pos.y + this.height;
       const otherTop = otherWord.pos.y;
       const otherBottom = otherWord.pos.y + otherWord.height;
+
+      //calculate overlap in X and Y directions
       let xDiff, yDiff;
-      const topA = this.pos.y;
       if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
         // this word needs to move to the left
         xDiff = otherLeft - thisRight;
-      } else {
+      } else {  // this word needs to move to the right
         xDiff = otherRight - thisLeft;
       }
       if (this.pos.y + this.height*0.5 < otherWord.pos.y + otherWord.height*0.5) {
         // this word needs to move up
         yDiff = otherTop - thisBottom;
-      } else {
+      } else {  //this word needs to move down
         yDiff = otherBottom - thisTop;
       }
-      //
+
+      // generate rough impulse vector that mostly moves over the shorter overlap
       const impulse = {};
       if (Math.abs(xDiff) > Math.abs(yDiff)) {
         impulse.x = Math.abs(yDiff) / xDiff;
