@@ -9,6 +9,7 @@ class Word{
     ctx.font = '10pt sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
     this.height = 10 + PADDING * 2;
+    this.active = true;
   }
 
   render(ctx){
@@ -37,16 +38,14 @@ class Word{
       y >= this.pos.y && y <= this.pos.y + this.height
     );
   }
-  // y = 10
-  // x = 4
-  // x
 
   checkCollision(otherWord){
-    // console.log(this.pos.y < otherWord.pos.y);
+    // check for box collision
     if (this.pos.x + this.width > otherWord.pos.x &&
     this.pos.x < otherWord.pos.x + otherWord.width &&
     this.pos.y + this.height > otherWord.pos.y &&
     this.pos.y < otherWord.pos.y + otherWord.height){
+
 
       const thisRight = this.pos.x + this.width;
       const thisLeft = this.pos.x;
@@ -72,7 +71,7 @@ class Word{
       } else {
         yDiff = otherBottom - thisTop;
       }
-
+      // 
       const impulse = {};
       if (Math.abs(xDiff) > Math.abs(yDiff)) {
         impulse.x = Math.abs(yDiff) / xDiff;
@@ -81,13 +80,6 @@ class Word{
         impulse.x = xDiff;
         impulse.y = Math.abs(xDiff) / yDiff;
       }
-
-      console.log(xDiff, yDiff);
-
-      // const impulse = {
-      //   x: this.pos.x + this.width*0.5 - (otherWord.pos.x + otherWord.width*0.5),
-      //   y: this.pos.y + this.width*0.5 - (otherWord.pos.y + otherWord.width*0.5),
-      // };
       return {object: this, impulse};
     }
     // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
