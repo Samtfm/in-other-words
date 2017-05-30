@@ -4,6 +4,28 @@ class Board{
   constructor(canvas){
     this.width = canvas.width;
     this.height = canvas.height;
+    this.walls = [
+      { //left
+        pos: {x: -100, y: -400},
+        width: 100,
+        height: this.height + 800
+      },
+      { //right
+        pos: {x: this.width, y: -400},
+        width: 100,
+        height: this.height + 800
+      },
+      { //top
+        pos: {x: -400, y: -100},
+        width: this.width + 800,
+        height: -100
+      },
+      { //bottom
+        pos: {x: -400, y: this.height},
+        width: this.width + 800,
+        height: 100
+      }
+    ];
     this.ctx = canvas.getContext("2d");
     this.words = [];
     this.rect = canvas.getBoundingClientRect();
@@ -73,6 +95,13 @@ class Board{
           }
         }
       });
+      this.walls.forEach(wall => {
+        let collision = wordA.checkCollision(wall);
+        if (collision) {
+          collisions.push(collision);
+        }
+      });
+
     });
     collisions.forEach(({object, impulse}) => {
       object.vel.x += Math.sign(impulse.x)*.3;
