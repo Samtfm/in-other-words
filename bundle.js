@@ -188,11 +188,12 @@ var Word = function () {
       ctx.font = '10pt sans-serif';
       this.width = ctx.measureText(this.text).width;
       this.height = 10;
+      ctx.fillStyle = 'skyblue';
+      ctx.fillRect(this.pos.x, this.pos.y, this.width, -this.height);
       ctx.fillStyle = 'black';
-
-      ctx.fillText(this.text, this.pos.x - this.width / 2, this.pos.y + this.height / 2);
+      ctx.fillText(this.text, this.pos.x, this.pos.y);
       ctx.fillStyle = 'red';
-      ctx.fillRect(this.pos.x, this.pos.y, 3, 3);
+      ctx.fillRect(this.pos.x + this.width / 2, this.pos.y - this.height / 2, 3, 3);
     }
   }, {
     key: 'move',
