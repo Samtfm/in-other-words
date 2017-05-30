@@ -14,11 +14,11 @@ class Word{
 
   render(ctx){
     ctx.fillStyle = 'skyblue';
-    ctx.fillRect(this.pos.x, this.pos.y, this.width, -this.height);
+    ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
     ctx.fillStyle = 'black';
-    ctx.fillText(this.text, this.pos.x + PADDING, this.pos.y - PADDING);
+    ctx.fillText(this.text, this.pos.x + PADDING, this.pos.y - PADDING + this.height);
     ctx.fillStyle = 'red';
-    ctx.fillRect(this.pos.x + this.width/2, this.pos.y - this.height/2, 3, 3);
+    ctx.fillRect(this.pos.x + this.width/2, this.pos.y + this.height/2, 3, 3);
   }
 
   move(){
@@ -31,6 +31,11 @@ class Word{
       this.vel.x *= 1-FRICTION;
       this.vel.y *= 1-FRICTION;
     }
+  }
+
+  moveTo(x, y){
+    this.pos.x = x - this.width*0.5;
+    this.pos.y = y - this.height*0.5;
   }
 
   hitTest(x, y){

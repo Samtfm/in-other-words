@@ -12,7 +12,7 @@ class Board{
     this.heldWord = null;
     document.addEventListener("mouseup", this.endDrag.bind(this));
 
-    for (var i = 0; i < 1; i++) {
+    for (var i = 0; i < 20; i++) {
       let word = new Word(
         `worrrddd${i}`,
         Math.random()*this.width,
@@ -27,8 +27,9 @@ class Board{
       this.updateVelocities();
       this.updatePositions();
       this.renderAll(this.ctx);
-      if (times > 60) {
+      if (times > 600) {
         clearInterval(ticker);
+        this.ctx.fillText('TIMEOUT', 100,50);
       }
       times++;
     }, 40);
@@ -49,10 +50,14 @@ class Board{
     console.log(this.heldWord);
   }
   onMouseMove(e){
-
+    const x = e.clientX - this.rect.left;
+    const y = e.clientY - this.rect.top;
+    if (this.heldWord) {
+      this.heldWord.moveTo(x, y);
+    }
   }
   endDrag(e){
-
+    this.heldWord = null;
   }
 
   updateVelocities(){
