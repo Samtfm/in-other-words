@@ -75,10 +75,10 @@ class Board{
       });
     });
     collisions.forEach(({object, impulse}) => {
-      object.vel.x += impulse.x/3;
-      object.vel.y += impulse.y/3;
-      // object.pos.x += impulse.x;
-      // object.pos.y += impulse.y;
+      object.vel.x += Math.sign(impulse.x)*.3;
+      object.vel.y +=  Math.sign(impulse.y)*.1;
+      object.pos.x += impulse.x/5;
+      object.pos.y += impulse.y/5;
     });
   }
   updatePositions(){

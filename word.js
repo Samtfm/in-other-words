@@ -82,7 +82,7 @@ class Word{
 
       // generate rough impulse vector that mostly moves over the shorter overlap
       const impulse = {};
-      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+      if (Math.abs(xDiff*.5) > Math.abs(yDiff)) {
         impulse.x = Math.abs(yDiff) / xDiff;
         impulse.y = yDiff;
       } else {
