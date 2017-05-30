@@ -88,7 +88,7 @@ var Board = function () {
     this.width = width;
     this.height = height;
     this.words = [];
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 35; i++) {
       var word = new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height, ctx);
       this.words.push(word);
     }
@@ -185,6 +185,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var MIN_SPEED = 0.01;
 var FRICTION = 0.1;
+var PADDING = 4;
 
 var Word = function () {
   function Word(text, x, y, ctx) {
@@ -194,8 +195,8 @@ var Word = function () {
     this.pos = { x: x, y: y };
     this.vel = { x: Math.random() * 10 - 5, y: Math.random() * 10 - 5 };
     ctx.font = '10pt sans-serif';
-    this.width = ctx.measureText(this.text).width;
-    this.height = 10;
+    this.width = ctx.measureText(this.text).width + PADDING * 2;
+    this.height = 10 + PADDING * 2;
   }
 
   _createClass(Word, [{
@@ -204,7 +205,7 @@ var Word = function () {
       ctx.fillStyle = 'skyblue';
       ctx.fillRect(this.pos.x, this.pos.y, this.width, -this.height);
       ctx.fillStyle = 'black';
-      ctx.fillText(this.text, this.pos.x, this.pos.y);
+      ctx.fillText(this.text, this.pos.x + PADDING, this.pos.y - PADDING);
       ctx.fillStyle = 'red';
       ctx.fillRect(this.pos.x + this.width / 2, this.pos.y - this.height / 2, 3, 3);
     }

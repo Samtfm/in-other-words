@@ -5,7 +5,7 @@ class Board{
     this.width = width;
     this.height = height;
     this.words = [];
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 35; i++) {
       let word = new Word(
         `worrrddd${i}`,
         Math.random()*this.width,
