@@ -56,7 +56,6 @@ class Word{
       const thisBottom = this.pos.y + this.height;
       const otherTop = otherWord.pos.y;
       const otherBottom = otherWord.pos.y + otherWord.height;
-
       let xDiff, yDiff;
       const topA = this.pos.y;
       if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
@@ -71,7 +70,7 @@ class Word{
       } else {
         yDiff = otherBottom - thisTop;
       }
-      // 
+      //
       const impulse = {};
       if (Math.abs(xDiff) > Math.abs(yDiff)) {
         impulse.x = Math.abs(yDiff) / xDiff;
