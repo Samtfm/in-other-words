@@ -4,11 +4,14 @@ class Board{
   constructor(ctx, width, height){
     this.width = width;
     this.height = height;
-    this.words = [new Word('happy', 20, 20)];
-    for (var i = 0; i < 10; i++) {
-      this.words.push(new Word(`worrrddd${i}`,
-         Math.random()*this.width,
-         Math.random()*this.height));
+    this.words = [];
+    for (var i = 0; i < 15; i++) {
+      let word = new Word(
+        `worrrddd${i}`,
+        Math.random()*this.width,
+        Math.random()*this.height,
+        ctx);
+      this.words.push(word);
     }
     console.log(this.width);
     let times = 0;
@@ -17,7 +20,7 @@ class Board{
       this.updateVelocities();
       this.updatePositions();
       this.renderAll(ctx);
-      if (times > 20) {
+      if (times > 60) {
         clearInterval(ticker);
       }
       console.log(times);
@@ -26,14 +29,20 @@ class Board{
   }
 
   updateVelocities(){
+    const collisions = [];
     this.words.forEach(wordA => {
       this.words.forEach(wordB => {
         if (wordA !== wordB) {
-          // resolveCollision
+          let collision = wordA.checkCollision(wordB);
+          if (collision) {
+            collisions.push(collision);
+          }
         }
       });
     });
-
+    collisions.forEach(({object, impulse}) => {
+      object.vel = impulse;
+    });
   }
   updatePositions(){
     this.words.forEach(word => {

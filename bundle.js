@@ -87,9 +87,10 @@ var Board = function () {
 
     this.width = width;
     this.height = height;
-    this.words = [new Word('happy', 20, 20)];
-    for (var i = 0; i < 10; i++) {
-      this.words.push(new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height));
+    this.words = [];
+    for (var i = 0; i < 15; i++) {
+      var word = new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height, ctx);
+      this.words.push(word);
     }
     console.log(this.width);
     var times = 0;
@@ -98,7 +99,7 @@ var Board = function () {
       _this.updateVelocities();
       _this.updatePositions();
       _this.renderAll(ctx);
-      if (times > 20) {
+      if (times > 60) {
         clearInterval(ticker);
       }
       console.log(times);
@@ -111,12 +112,22 @@ var Board = function () {
     value: function updateVelocities() {
       var _this2 = this;
 
+      var collisions = [];
       this.words.forEach(function (wordA) {
         _this2.words.forEach(function (wordB) {
           if (wordA !== wordB) {
-            // resolveCollision
+            var collision = wordA.checkCollision(wordB);
+            if (collision) {
+              collisions.push(collision);
+            }
           }
         });
+      });
+      collisions.forEach(function (_ref) {
+        var object = _ref.object,
+            impulse = _ref.impulse;
+
+        object.vel = impulse;
       });
     }
   }, {
@@ -171,23 +182,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MIN_SPEED = 0.01;
-var FRICTION = 0.1;
+var FRICTION = 0.01;
 
 var Word = function () {
-  function Word(text, x, y) {
+  function Word(text, x, y, ctx) {
     _classCallCheck(this, Word);
 
     this.text = text;
     this.pos = { x: x, y: y };
     this.vel = { x: Math.random() * 10 - 5, y: Math.random() * 10 - 5 };
+    ctx.font = '10pt sans-serif';
+    this.width = ctx.measureText(this.text).width;
+    this.height = 10;
   }
 
   _createClass(Word, [{
     key: 'render',
     value: function render(ctx) {
-      ctx.font = '10pt sans-serif';
-      this.width = ctx.measureText(this.text).width;
-      this.height = 10;
       ctx.fillStyle = 'skyblue';
       ctx.fillRect(this.pos.x, this.pos.y, this.width, -this.height);
       ctx.fillStyle = 'black';
@@ -211,6 +222,20 @@ var Word = function () {
   }, {
     key: 'checkCollision',
     value: function checkCollision(otherWord) {
+      if (this.pos.x + this.width > otherWord.pos.x && this.pos.x < otherWord.pos.x + otherWord.width && this.pos.y + this.height > otherWord.pos.y && this.pos.y < otherWord.pos.y + otherWord.height) {
+        console.log(this.vel);
+        // const impulse = {};
+        // if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
+        //   this.impulse.x =
+        // } else {
+        //
+        // }
+        // const impulse = {
+        //   x: this.pos.x + this.width*0.5 - (otherWord.pos.x + otherWord.width*0.5),
+        //   y: this.pos.y + this.width*0.5 - (otherWord.pos.y + otherWord.width*0.5),
+        // };
+        return { object: this, impulse: { x: otherWord.vel.x, y: otherWord.vel.y } };
+      }
       // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
     }
   }]);
