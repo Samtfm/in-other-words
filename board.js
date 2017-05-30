@@ -43,7 +43,6 @@ class Board{
         this.ctx);
       this.words.push(word);
     }
-    console.log(this.width);
     let times = 0;
     let ticker = setInterval( () => {
       this.ctx.clearRect(0,0, this.width,this.height);
