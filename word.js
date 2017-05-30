@@ -30,6 +30,13 @@ class Word{
       this.vel.y *= 1-FRICTION;
     }
   }
+
+  isInBounds(x, y){
+    return (
+      x >= this.pos.x && x <= this.pos.x + this.width &&
+      y >= this.pos.y && y <= this.pos.y + this.height
+    );
+  }
   // y = 10
   // x = 4
   // x

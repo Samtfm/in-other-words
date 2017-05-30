@@ -88,7 +88,7 @@ var Board = function () {
     this.width = width;
     this.height = height;
     this.words = [];
-    for (var i = 0; i < 35; i++) {
+    for (var i = 0; i < 65; i++) {
       var word = new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height, ctx);
       this.words.push(word);
     }
@@ -221,6 +221,11 @@ var Word = function () {
         this.vel.x *= 1 - FRICTION;
         this.vel.y *= 1 - FRICTION;
       }
+    }
+  }, {
+    key: 'isInBounds',
+    value: function isInBounds(x, y) {
+      return x >= this.pos.x && x <= this.pos.x + this.width && y >= this.pos.y && y <= this.pos.y + this.height;
     }
     // y = 10
     // x = 4
