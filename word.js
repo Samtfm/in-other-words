@@ -1,10 +1,10 @@
 const MIN_SPEED = 0.01;
-const FRICTION = 0.3;
+const FRICTION = 0.1;
 class Word{
   constructor(text, x, y){
     this.text = text;
     this.pos = {x, y};
-    this.vel = {x: 10, y: 6};
+    this.vel = {x: Math.random()*10-5, y: Math.random()*10-5};
   }
 
   render(ctx){
@@ -24,10 +24,13 @@ class Word{
       this.vel.x = 0;
       this.vel.y = 0;
     } else {
-      this.vel.x *= FRICTION;
-      this.vel.y *= FRICTION;
+      this.vel.x *= 1-FRICTION;
+      this.vel.y *= 1-FRICTION;
     }
-    console.log(this.vel);
+  }
+
+  checkCollision(otherWord){
+    // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
   }
 }
 

@@ -80,20 +80,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Word = __webpack_require__(2);
 
 var Board = function () {
-  function Board(ctx) {
+  function Board(ctx, width, height) {
     var _this = this;
 
     _classCallCheck(this, Board);
 
+    this.width = width;
+    this.height = height;
     this.words = [new Word('happy', 20, 20)];
-    var i = 1;
-    setInterval(function () {
+    for (var i = 0; i < 10; i++) {
+      this.words.push(new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height));
+    }
+    console.log(this.width);
+    var times = 0;
+    var ticker = setInterval(function () {
       ctx.clearRect(0, 0, 400, 400);
-      _this.words.forEach(function (word) {
-        word.move();
-        word.render(ctx);
-      });
-    }, 1000);
+      _this.updateVelocities();
+      _this.updatePositions();
+      _this.renderAll(ctx);
+      if (times > 20) {
+        clearInterval(ticker);
+      }
+      console.log(times);
+      times++;
+    }, 40);
   }
 
   _createClass(Board, [{
@@ -102,11 +112,25 @@ var Board = function () {
       var _this2 = this;
 
       this.words.forEach(function (wordA) {
-        _this2.word.forEach(function (wordB) {
+        _this2.words.forEach(function (wordB) {
           if (wordA !== wordB) {
-            // calculateVel
+            // resolveCollision
           }
         });
+      });
+    }
+  }, {
+    key: 'updatePositions',
+    value: function updatePositions() {
+      this.words.forEach(function (word) {
+        word.move();
+      });
+    }
+  }, {
+    key: 'renderAll',
+    value: function renderAll(ctx) {
+      this.words.forEach(function (word) {
+        word.render(ctx);
       });
     }
   }]);
@@ -132,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var ctx = canvasEl.getContext("2d");
 
-  var board = new Board(ctx);
+  var board = new Board(ctx, 400, 200);
 });
 
 /***/ }),
@@ -147,7 +171,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MIN_SPEED = 0.01;
-var FRICTION = 0.3;
+var FRICTION = 0.1;
 
 var Word = function () {
   function Word(text, x, y) {
@@ -155,7 +179,7 @@ var Word = function () {
 
     this.text = text;
     this.pos = { x: x, y: y };
-    this.vel = { x: 10, y: 6 };
+    this.vel = { x: Math.random() * 10 - 5, y: Math.random() * 10 - 5 };
   }
 
   _createClass(Word, [{
@@ -179,10 +203,14 @@ var Word = function () {
         this.vel.x = 0;
         this.vel.y = 0;
       } else {
-        this.vel.x *= FRICTION;
-        this.vel.y *= FRICTION;
+        this.vel.x *= 1 - FRICTION;
+        this.vel.y *= 1 - FRICTION;
       }
-      console.log(this.vel);
+    }
+  }, {
+    key: 'checkCollision',
+    value: function checkCollision(otherWord) {
+      // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
     }
   }]);
 

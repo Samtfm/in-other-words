@@ -7,5 +7,5 @@ document.addEventListener("DOMContentLoaded", function(){
 
   const ctx = canvasEl.getContext("2d");
 
-  const board = new Board(ctx);
+  const board = new Board(ctx, 400, 200);
 });
