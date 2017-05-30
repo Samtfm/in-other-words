@@ -36,6 +36,8 @@ class Word{
   moveTo(x, y){
     this.pos.x = x - this.width*0.5;
     this.pos.y = y - this.height*0.5;
+    this.vel.x = 0;
+    this.vel.y = 0;
   }
 
   hitTest(x, y){

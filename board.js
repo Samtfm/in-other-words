@@ -44,6 +44,7 @@ class Board{
       console.log(x, y, word.pos.x, word.pos.y);
       if (word.hitTest(x, y)){
         this.heldWord = word;
+        this.heldWord.active = false;
         break;
       }
     }
@@ -57,6 +58,7 @@ class Board{
     }
   }
   endDrag(e){
+    this.heldWord.active = true;
     this.heldWord = null;
   }
 
@@ -64,7 +66,7 @@ class Board{
     const collisions = [];
     this.words.forEach(wordA => {
       this.words.forEach(wordB => {
-        if (wordA !== wordB) {
+        if (wordA !== wordB && wordA.active && wordB.active) {
           let collision = wordA.checkCollision(wordB);
           if (collision) {
             collisions.push(collision);
@@ -73,8 +75,8 @@ class Board{
       });
     });
     collisions.forEach(({object, impulse}) => {
-      object.vel.x += impulse.x/2;
-      object.vel.y += impulse.y/2;
+      object.vel.x += impulse.x/3;
+      object.vel.y += impulse.y/3;
       // object.pos.x += impulse.x;
       // object.pos.y += impulse.y;
     });
