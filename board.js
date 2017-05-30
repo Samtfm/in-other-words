@@ -23,7 +23,6 @@ class Board{
       if (times > 60) {
         clearInterval(ticker);
       }
-      console.log(times);
       times++;
     }, 40);
   }
@@ -41,7 +40,10 @@ class Board{
       });
     });
     collisions.forEach(({object, impulse}) => {
-      object.vel = impulse;
+      object.vel.x += impulse.x/2;
+      object.vel.y += impulse.y/2;
+      // object.pos.x += impulse.x;
+      // object.pos.y += impulse.y;
     });
   }
   updatePositions(){

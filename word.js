@@ -1,5 +1,5 @@
 const MIN_SPEED = 0.01;
-const FRICTION = 0.01;
+const FRICTION = 0.1;
 class Word{
   constructor(text, x, y, ctx){
     this.text = text;
@@ -29,24 +29,58 @@ class Word{
       this.vel.y *= 1-FRICTION;
     }
   }
+  // y = 10
+  // x = 4
+  // x
 
   checkCollision(otherWord){
+    // console.log(this.pos.y < otherWord.pos.y);
     if (this.pos.x + this.width > otherWord.pos.x &&
     this.pos.x < otherWord.pos.x + otherWord.width &&
     this.pos.y + this.height > otherWord.pos.y &&
     this.pos.y < otherWord.pos.y + otherWord.height){
-      console.log(this.vel);
-      // const impulse = {};
-      // if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
-      //   this.impulse.x =
-      // } else {
-      //
-      // }
+
+      const thisRight = this.pos.x + this.width;
+      const thisLeft = this.pos.x;
+      const otherRight = otherWord.pos.x + otherWord.width;
+      const otherLeft = otherWord.pos.x;
+
+      const thisTop = this.pos.y;
+      const thisBottom = this.pos.y + this.height;
+      const otherTop = otherWord.pos.y;
+      const otherBottom = otherWord.pos.y + otherWord.height;
+
+      let xDiff, yDiff;
+      const topA = this.pos.y;
+      if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
+        // this word needs to move to the left
+        xDiff = otherLeft - thisRight;
+      } else {
+        xDiff = otherRight - thisLeft;
+      }
+      if (this.pos.y + this.height*0.5 < otherWord.pos.y + otherWord.height*0.5) {
+        // this word needs to move up
+        yDiff = otherTop - thisBottom;
+      } else {
+        yDiff = otherBottom - thisTop;
+      }
+
+      const impulse = {};
+      if (Math.abs(xDiff) > Math.abs(yDiff)) {
+        impulse.x = Math.abs(yDiff) / xDiff;
+        impulse.y = yDiff;
+      } else {
+        impulse.x = xDiff;
+        impulse.y = Math.abs(xDiff) / yDiff;
+      }
+
+      console.log(xDiff, yDiff);
+
       // const impulse = {
       //   x: this.pos.x + this.width*0.5 - (otherWord.pos.x + otherWord.width*0.5),
       //   y: this.pos.y + this.width*0.5 - (otherWord.pos.y + otherWord.width*0.5),
       // };
-      return {object: this, impulse: {x: otherWord.vel.x, y: otherWord.vel.y}};
+      return {object: this, impulse};
     }
     // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
   }

@@ -102,7 +102,6 @@ var Board = function () {
       if (times > 60) {
         clearInterval(ticker);
       }
-      console.log(times);
       times++;
     }, 40);
   }
@@ -127,7 +126,10 @@ var Board = function () {
         var object = _ref.object,
             impulse = _ref.impulse;
 
-        object.vel = impulse;
+        object.vel.x += impulse.x / 2;
+        object.vel.y += impulse.y / 2;
+        // object.pos.x += impulse.x;
+        // object.pos.y += impulse.y;
       });
     }
   }, {
@@ -182,7 +184,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MIN_SPEED = 0.01;
-var FRICTION = 0.01;
+var FRICTION = 0.1;
 
 var Word = function () {
   function Word(text, x, y, ctx) {
@@ -219,22 +221,58 @@ var Word = function () {
         this.vel.y *= 1 - FRICTION;
       }
     }
+    // y = 10
+    // x = 4
+    // x
+
   }, {
     key: 'checkCollision',
     value: function checkCollision(otherWord) {
+      // console.log(this.pos.y < otherWord.pos.y);
       if (this.pos.x + this.width > otherWord.pos.x && this.pos.x < otherWord.pos.x + otherWord.width && this.pos.y + this.height > otherWord.pos.y && this.pos.y < otherWord.pos.y + otherWord.height) {
-        console.log(this.vel);
-        // const impulse = {};
-        // if (this.pos.x + this.width*0.5 < otherWord.pos.x + otherWord.width*0.5) {
-        //   this.impulse.x =
-        // } else {
-        //
-        // }
+
+        var thisRight = this.pos.x + this.width;
+        var thisLeft = this.pos.x;
+        var otherRight = otherWord.pos.x + otherWord.width;
+        var otherLeft = otherWord.pos.x;
+
+        var thisTop = this.pos.y;
+        var thisBottom = this.pos.y + this.height;
+        var otherTop = otherWord.pos.y;
+        var otherBottom = otherWord.pos.y + otherWord.height;
+
+        var xDiff = void 0,
+            yDiff = void 0;
+        var topA = this.pos.y;
+        if (this.pos.x + this.width * 0.5 < otherWord.pos.x + otherWord.width * 0.5) {
+          // this word needs to move to the left
+          xDiff = otherLeft - thisRight;
+        } else {
+          xDiff = otherRight - thisLeft;
+        }
+        if (this.pos.y + this.height * 0.5 < otherWord.pos.y + otherWord.height * 0.5) {
+          // this word needs to move up
+          yDiff = otherTop - thisBottom;
+        } else {
+          yDiff = otherBottom - thisTop;
+        }
+
+        var impulse = {};
+        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+          impulse.x = Math.abs(yDiff) / xDiff;
+          impulse.y = yDiff;
+        } else {
+          impulse.x = xDiff;
+          impulse.y = Math.abs(xDiff) / yDiff;
+        }
+
+        console.log(xDiff, yDiff);
+
         // const impulse = {
         //   x: this.pos.x + this.width*0.5 - (otherWord.pos.x + otherWord.width*0.5),
         //   y: this.pos.y + this.width*0.5 - (otherWord.pos.y + otherWord.width*0.5),
         // };
-        return { object: this, impulse: { x: otherWord.vel.x, y: otherWord.vel.y } };
+        return { object: this, impulse: impulse };
       }
       // const leftCollision = this.x+this.width/2 - (otherWord.pos.x + otherWord.width/2);
     }
