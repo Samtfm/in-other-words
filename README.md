@@ -3,8 +3,8 @@ In Other Words is a tool for writing and coming up with ideas.
 Starting with a random word (or one of their choosing), users will be able to fetch more related words from each word they click on.
 
 Inspired by [visuwords](https://visuwords.com/) with the following modifications
- - words can be rearranged, and are not tied to their original source
- - design focuses less on the types of associations and more on the words themselves.
+  - design focuses less on the types of associations and more on the words themselves.
+  - words are free floating, not tied to the source that generated them.
 
 # wireframe
 
@@ -38,6 +38,8 @@ Inspired by [visuwords](https://visuwords.com/) with the following modifications
 `main.js`: this script will handle logic for clearing the board and updating the canvas
 
 # Implementation Timeline
+Day 0: Research thesaurus APIs. set up project with webpack.
+
 Day 1: draw words to canvas as movable objects
 
 Day 2: implement physics to spread words apart
