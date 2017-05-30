@@ -90,6 +90,7 @@ class Board{
     this.words.forEach(word => {
       word.render(ctx);
     });
+    if (this.heldWord) this.heldWord.render(ctx, {shadow: true});
   }
 }
 module.exports = Board;

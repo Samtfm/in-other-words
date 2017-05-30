@@ -12,9 +12,17 @@ class Word{
     this.active = true;
   }
 
-  render(ctx){
+  render(ctx, options){
+    options = options || {};
+    if (options.shadow){
+      ctx.shadowColor = 'gray';
+      ctx.shadowBlur = 12;
+    }
     ctx.fillStyle = 'skyblue';
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    //reset shadow
+    ctx.shadowColor = 'rgba(0,0,0,0)';
+    ctx.shadowBlur = 0;
     ctx.fillStyle = 'black';
     ctx.fillText(this.text, this.pos.x + PADDING, this.pos.y - PADDING + this.height);
     ctx.fillStyle = 'red';
