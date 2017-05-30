@@ -17,9 +17,9 @@ Inspired by [visuwords](https://visuwords.com/) with the following modifications
   - [ ] words have basic collision handling, so they spread without overlapping
   - [ ] users can drag words around the screen to rearrange them
   - [ ] double-clicking a word expands fetches related words
+  - [ ] users can manually enter words by typing them in
 
 **bonus**
-  - [ ] users can manually enter words by typing them in
   - [ ] users can hold on to words by dragging them to the notepad section
 
 
