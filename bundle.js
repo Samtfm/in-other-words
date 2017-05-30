@@ -73,25 +73,46 @@
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Word = __webpack_require__(2);
 
-var Board = function Board(ctx) {
-  var _this = this;
+var Board = function () {
+  function Board(ctx) {
+    var _this = this;
 
-  _classCallCheck(this, Board);
+    _classCallCheck(this, Board);
 
-  this.words = [new Word('happy', 20, 20)];
-  var i = 1;
-  setInterval(function () {
-    ctx.clearRect(0, 0, 400, 400);
-    _this.words.forEach(function (word) {
-      word.move();
-      word.render(ctx);
-    });
-  }, 1000);
-};
+    this.words = [new Word('happy', 20, 20)];
+    var i = 1;
+    setInterval(function () {
+      ctx.clearRect(0, 0, 400, 400);
+      _this.words.forEach(function (word) {
+        word.move();
+        word.render(ctx);
+      });
+    }, 1000);
+  }
+
+  _createClass(Board, [{
+    key: 'updateVelocities',
+    value: function updateVelocities() {
+      var _this2 = this;
+
+      this.words.forEach(function (wordA) {
+        _this2.word.forEach(function (wordB) {
+          if (wordA !== wordB) {
+            // calculateVel
+          }
+        });
+      });
+    }
+  }]);
+
+  return Board;
+}();
 
 module.exports = Board;
 
@@ -125,35 +146,43 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var MIN_SPEED = 0.01;
+var FRICTION = 0.3;
+
 var Word = function () {
   function Word(text, x, y) {
     _classCallCheck(this, Word);
 
     this.text = text;
-    this.posx = x;
-    this.posy = y;
-    this.velx = 5;
-    this.vely = 3;
+    this.pos = { x: x, y: y };
+    this.vel = { x: 10, y: 6 };
   }
 
   _createClass(Word, [{
     key: 'render',
     value: function render(ctx) {
       ctx.font = '10pt sans-serif';
-      console.log(ctx.measureText(this.text));
       this.width = ctx.measureText(this.text).width;
       this.height = 10;
       ctx.fillStyle = 'black';
 
-      ctx.fillText(this.text, this.posx - this.width / 2, this.posy + this.height / 2);
+      ctx.fillText(this.text, this.pos.x - this.width / 2, this.pos.y + this.height / 2);
       ctx.fillStyle = 'red';
-      ctx.fillRect(this.posx, this.posy, 3, 3);
+      ctx.fillRect(this.pos.x, this.pos.y, 3, 3);
     }
   }, {
     key: 'move',
     value: function move() {
-      this.posx += this.velx;
-      this.posy += this.vely;
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
+      if (Math.hypot(this.vel.x + this.vel.y) < MIN_SPEED) {
+        this.vel.x = 0;
+        this.vel.y = 0;
+      } else {
+        this.vel.x *= FRICTION;
+        this.vel.y *= FRICTION;
+      }
+      console.log(this.vel);
     }
   }]);
 

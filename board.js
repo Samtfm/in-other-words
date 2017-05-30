@@ -12,5 +12,18 @@ class Board{
       });
     }, 1000);
   }
+
+
+
+  updateVelocities(){
+    this.words.forEach(wordA => {
+      this.word.forEach(wordB => {
+        if (wordA !== wordB) {
+          // calculateVel
+        }
+      });
+    });
+
+  }
 }
 module.exports = Board;
