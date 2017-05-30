@@ -1,4 +1,5 @@
 const Word = require('./word.js');
+import * as API from './api_util';
 
 class Board{
   constructor(canvas){
@@ -43,6 +44,14 @@ class Board{
         this.ctx);
       this.words.push(word);
     }
+    API.fetchRandomWord().then(res => {
+      this.words.push(new Word(
+        res.data,
+        this.width/2,
+        this.height/2,
+        this.ctx
+      ));
+    });
     let times = 0;
     let ticker = setInterval( () => {
       this.ctx.clearRect(0,0, this.width,this.height);
@@ -91,14 +100,11 @@ class Board{
       const word = this.words[i];
       if (word.hitTest(x, y)){
         word.shortFreeze();
-        // for (var i = 0; i < 5; i++) {
-        //   this.vel = {x: Math.random()*4-2), y: Math.random()*4-2)}
-        // }
-        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
-        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
-        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
-        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
-
+        for (var i = 0; i < 5; i++) {
+          const angle = Math.random()*Math.PI*2;
+          const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
+          this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx, vel));
+        }
         break;
       }
     }

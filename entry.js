@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function(){
   canvasEl.width = 600;
   canvasEl.height = 400;
   const board = new Board(canvasEl);
+
 });
-const axios = require('axios')
-window.axios = axios
+const axios = require('axios');
+window.axios = axios;
+
+//randoword api
+// http://setgetgo.com/randomword/get.php

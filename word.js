@@ -2,19 +2,15 @@ const MIN_SPEED = 0.001;
 const FRICTION = 0.3;
 const PADDING = 4;
 class Word{
-  constructor(text, x, y, ctx){
+  constructor(text, x, y, ctx, vel = {x: 0, y: 0}){
     this.text = text;
-    this.pos = {x, y};
-    this.vel = {};
-
     ctx.font = '10pt sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
     this.height = 10 + PADDING * 2;
+
     this.moveTo(x+this.width/2,y);
 
-    const angle = Math.random()*Math.PI*2;
-    this.vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
-
+    this.vel = vel;
     this.active = true;
     this.frozen = false;
   }
@@ -56,12 +52,13 @@ class Word{
   }
 
   moveTo(x, y){
-    console.log(this.pos);
+    if (!this.pos) this.pos = {};
     this.pos.x = x - this.width*0.5;
     this.pos.y = y - this.height*0.5;
-    this.vel.x = 0;
-    this.vel.y = 0;
-    console.log(this.pos);
+    if (this.vel){
+      this.vel.x = 0;
+      this.vel.y = 0;
+    }
   }
 
   getCenter(){
