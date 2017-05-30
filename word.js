@@ -5,11 +5,13 @@ class Word{
   constructor(text, x, y, ctx){
     this.text = text;
     this.pos = {x, y};
+    // this.moveTo(x,y).bind(this);
     this.vel = {x: Math.random()*10-5, y: Math.random()*10-5};
     ctx.font = '10pt sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
     this.height = 10 + PADDING * 2;
     this.active = true;
+    this.frozen = false;
   }
 
   render(ctx, options){
@@ -30,8 +32,10 @@ class Word{
   }
 
   move(){
-    this.pos.x += this.vel.x;
-    this.pos.y += this.vel.y;
+    if (!this.frozen){
+      this.pos.x += this.vel.x;
+      this.pos.y += this.vel.y;
+    }
     if (Math.hypot(this.vel.x + this.vel.y) < MIN_SPEED) {
       this.vel.x = 0;
       this.vel.y = 0;
@@ -41,11 +45,23 @@ class Word{
     }
   }
 
+  shortFreeze(){
+    this.frozen = true;
+    setTimeout(() => (this.frozen = false), 500);
+  }
+
   moveTo(x, y){
     this.pos.x = x - this.width*0.5;
     this.pos.y = y - this.height*0.5;
     this.vel.x = 0;
     this.vel.y = 0;
+  }
+
+  getCenter(){
+    return {
+      x: this.pos.x + this.width*0.5,
+      y: this.pos.y + this.height*0.5
+    };
   }
 
   hitTest(x, y){

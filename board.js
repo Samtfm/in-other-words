@@ -31,6 +31,7 @@ class Board{
     this.rect = canvas.getBoundingClientRect();
     canvas.onmousemove = this.onMouseMove.bind(this);
     canvas.onmousedown = this.startDrag.bind(this);
+    canvas.ondblclick = this.handleDoubleClick.bind(this);
     this.heldWord = null;
     document.addEventListener("mouseup", this.endDrag.bind(this));
 
@@ -45,7 +46,7 @@ class Board{
     console.log(this.width);
     let times = 0;
     let ticker = setInterval( () => {
-      this.ctx.clearRect(0,0, 400,400);
+      this.ctx.clearRect(0,0, this.width,this.height);
       this.updateVelocities();
       this.updatePositions();
       this.renderAll(this.ctx);
@@ -58,19 +59,17 @@ class Board{
   }
 
   startDrag(e){
+    e.preventDefault();
     const x = e.clientX - this.rect.left;
     const y = e.clientY - this.rect.top;
     for (let i = 0; i < this.words.length; i++) {
       const word = this.words[i];
-
-      console.log(x, y, word.pos.x, word.pos.y);
       if (word.hitTest(x, y)){
         this.heldWord = word;
         this.heldWord.active = false;
         break;
       }
     }
-    console.log(this.heldWord);
   }
   onMouseMove(e){
     const x = e.clientX - this.rect.left;
@@ -80,8 +79,30 @@ class Board{
     }
   }
   endDrag(e){
-    this.heldWord.active = true;
+    if (this.heldWord) {
+      this.heldWord.active = true;
+      this.heldWord.shortFreeze();
+    }
     this.heldWord = null;
+  }
+  handleDoubleClick(e){
+    const x = e.clientX - this.rect.left;
+    const y = e.clientY - this.rect.top;
+    for (let i = 0; i < this.words.length; i++) {
+      const word = this.words[i];
+      if (word.hitTest(x, y)){
+        word.shortFreeze();
+        // for (var i = 0; i < 5; i++) {
+        //   this.vel = {x: Math.random()*4-2), y: Math.random()*4-2)}
+        // }
+        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
+        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
+        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
+        this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx));
+
+        break;
+      }
+    }
   }
 
   updateVelocities(){
@@ -106,8 +127,10 @@ class Board{
     collisions.forEach(({object, impulse}) => {
       object.vel.x += Math.sign(impulse.x)*.3;
       object.vel.y +=  Math.sign(impulse.y)*.1;
-      object.pos.x += impulse.x/5;
-      object.pos.y += impulse.y/5;
+      if (!object.frozen){
+        object.pos.x += impulse.x/5;
+        object.pos.y += impulse.y/5;
+      }
     });
   }
   updatePositions(){
