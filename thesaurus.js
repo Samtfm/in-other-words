@@ -1,8 +1,10 @@
 const Board = require("./board.js");
+import * as APIUtil from './api_util.js';
 
 class Thesaurus{
   constructor(submitButton, wordField, canvas) {
     this.board = new Board(canvas);
+    this.store = {};
     const clearButton = document.getElementById("clear-button");
 
     clearButton.onclick = (e) => {
@@ -18,8 +20,20 @@ class Thesaurus{
         wordField.value = '';
       }
     };
+  }
 
-
+  fetchSynonyms(word, callback){
+    if (this.store[word]){
+      callback(this.store[word]);
+    } else {
+      APIUtil.fetchSynonyms(word).then(res => {
+        const synonyms = res.data.find(relation => (
+          relation.relationshipType === "synonym"
+        ));
+        this.store[word] = synonyms.words;
+        callback(synonyms.words);
+      });
+    }
   }
 }
 
