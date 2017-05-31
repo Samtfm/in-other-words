@@ -4,9 +4,9 @@ const PADDING = 6;
 class Word{
   constructor(text, x, y, ctx, vel = {x: 0, y: 0}){
     this.text = text;
-    ctx.font = '12pt sans-serif';
+    ctx.font = '14pt sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
-    this.height = 12 + PADDING * 2;
+    this.height = 14 + PADDING * 2;
 
     this.moveTo(x+this.width/2,y);
 

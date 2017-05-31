@@ -2,8 +2,8 @@ import Thesaurus from './thesaurus.js';
 
 document.addEventListener("DOMContentLoaded", function(){
   const canvasEl = document.getElementById("canvas");
-  canvasEl.width = 600;
-  canvasEl.height = 400;
+  canvasEl.width = 800;
+  canvasEl.height = 600;
 
   const submitButton = document.getElementById("submit-word");
   const wordField = document.getElementById("word-field");

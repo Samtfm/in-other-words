@@ -103,6 +103,7 @@ class Board{
     words.forEach(word =>{
       const angle = Math.random()*Math.PI*2;
       const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
+      console.log(pos);
       this.addWord(word, pos, vel);
     });
   }
