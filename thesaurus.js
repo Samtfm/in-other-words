@@ -1,14 +1,20 @@
 const Board = require("./board.js");
 
 class Thesaurus{
-  constructor(board) {
-    // const ctx = canvas.getContext("2d");
-    // canvasEl.onmousemove = (e) => console.log(e);
-    // document.addEventListener("drag", board.handleClick.bind(board));
-    // this.board = board;
-  }
+  constructor(submitButton, wordField, canvas) {
+    this.board = new Board(canvas);
 
-  handleClick(e){
+    submitButton.onclick = (e) => {
+      e.preventDefault();
+      console.log(e.target);
+      if (wordField.value !== ''){
+        this.board.addWord(wordField.value);
+        wordField.value = '';
+      }
+    };
 
+    
   }
 }
+
+export default Thesaurus;
