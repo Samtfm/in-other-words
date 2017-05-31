@@ -19,7 +19,7 @@ class Board{
       { //top
         pos: {x: -400, y: -100},
         width: this.width + 800,
-        height: -100
+        height: 100
       },
       { //bottom
         pos: {x: -400, y: this.height},
@@ -36,7 +36,7 @@ class Board{
     this.heldWord = null;
     document.addEventListener("mouseup", this.endDrag.bind(this));
 
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 0; i++) {
       let word = new Word(
         `worrrddd${i}`,
         Math.random()*this.width,
@@ -58,7 +58,7 @@ class Board{
       this.updateVelocities();
       this.updatePositions();
       this.renderAll(this.ctx);
-      if (times > 600) {
+      if (times > 10000) {
         clearInterval(ticker);
         this.ctx.fillText('TIMEOUT', 100,50);
       }
@@ -93,6 +93,10 @@ class Board{
     }
     this.heldWord = null;
   }
+
+  addWord(text, pos={x:0, y:0}, vel={x:0,y:0}){
+    this.words.push(new Word(text, pos.x, pos.y, this.ctx, vel));
+  }
   handleDoubleClick(e){
     const x = e.clientX - this.rect.left;
     const y = e.clientY - this.rect.top;
@@ -103,7 +107,7 @@ class Board{
         for (var i = 0; i < 5; i++) {
           const angle = Math.random()*Math.PI*2;
           const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
-          this.words.push(new Word("I'm related!", word.pos.x, word.pos.y, this.ctx, vel));
+          this.addWord("I'm related!", word.pos, vel);
         }
         break;
       }
