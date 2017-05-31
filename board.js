@@ -46,7 +46,7 @@ class Board{
     }
     API.fetchRandomWord().then(res => {
       this.words.push(new Word(
-        res.data,
+        res.data.word,
         this.width/2,
         this.height/2,
         this.ctx
