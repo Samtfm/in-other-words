@@ -776,7 +776,7 @@ var fetchRandomWord = exports.fetchRandomWord = function fetchRandomWord() {
   return axios({
     method: 'get',
     // url: "http://setgetgo.com/randomword/get.php"
-    url: 'http://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=10&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=' + key + 'abf50eb4ae5'
+    url: 'https://api.wordnik.com:80/v4/words.json/randomWord?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=10&maxDictionaryCount=-1&minLength=5&maxLength=-1&api_key=' + key + 'abf50eb4ae5'
   });
 };
 
@@ -784,14 +784,14 @@ var fetchRandomWords = exports.fetchRandomWords = function fetchRandomWords(coun
   return axios({
     method: 'get',
     // url: "http://setgetgo.com/randomword/get.php"
-    url: 'http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=40&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=' + count + '&api_key=' + key + 'abf50eb4ae5'
+    url: 'https://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=40&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=' + count + '&api_key=' + key + 'abf50eb4ae5'
   });
 };
 
 var fetchRelatedWords = exports.fetchRelatedWords = function fetchRelatedWords(word) {
   return axios({
     method: 'GET',
-    url: 'http://api.wordnik.com:80/v4/word.json/' + word + '/relatedWords?useCanonical=false&limitPerRelationshipType=20&api_key=' + key + 'abf50eb4ae5'
+    url: 'https://api.wordnik.com:80/v4/word.json/' + word + '/relatedWords?useCanonical=false&limitPerRelationshipType=20&api_key=' + key + 'abf50eb4ae5'
   });
 };
 
