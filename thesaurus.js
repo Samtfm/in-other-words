@@ -11,7 +11,9 @@ class Thesaurus{
       e.preventDefault();
       this.board.clear();
     };
-
+    document.addEventListener("fetchRelatedWords", (e) => {
+      this.fetchSynonyms(e.detail.text, this.addWords.bind(this));
+    });
     submitButton.onclick = (e) => {
       e.preventDefault();
       console.log(e.target);
@@ -22,16 +24,22 @@ class Thesaurus{
     };
   }
 
+  addWords(words, pos){
+    this.board.addWords(words, pos);
+  }
+
   fetchSynonyms(word, callback){
     if (this.store[word]){
       callback(this.store[word]);
     } else {
-      APIUtil.fetchSynonyms(word).then(res => {
+      APIUtil.fetchRelatedWords(word).then(res => {
+        console.log(res);
         const synonyms = res.data.find(relation => (
           relation.relationshipType === "synonym"
         ));
         this.store[word] = synonyms.words;
-        callback(synonyms.words);
+        console.log(synonyms.words);
+        callback(synonyms.words, word.pos);
       });
     }
   }

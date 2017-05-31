@@ -97,6 +97,16 @@ class Board{
   addWord(text, pos={x:this.width*0.5, y:this.height*0.5}, vel={x:-5,y:0}){
     this.words.push(new Word(text, pos.x, pos.y, this.ctx, vel));
   }
+
+  addWords(words, pos){
+    console.log(words);
+    words.forEach(word =>{
+      const angle = Math.random()*Math.PI*2;
+      const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
+      this.addWord(word, pos, vel);
+    });
+  }
+
   clear(){
     this.words = [];
   }
@@ -107,11 +117,13 @@ class Board{
       const word = this.words[i];
       if (word.hitTest(x, y)){
         word.shortFreeze();
-        for (var i = 0; i < 5; i++) {
-          const angle = Math.random()*Math.PI*2;
-          const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
-          this.addWord("I'm related!", word.pos, vel);
-        }
+        const fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
+        document.dispatchEvent(fetchEvent);
+        // for (var i = 0; i < 5; i++) {
+        //   const angle = Math.random()*Math.PI*2;
+        //   const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
+        //   this.addWord("I'm related!", word.pos, vel);
+        // }
         break;
       }
     }
