@@ -1,12 +1,12 @@
 const MIN_SPEED = 0.001;
 const FRICTION = 0.3;
-const PADDING = 4;
+const PADDING = 6;
 class Word{
   constructor(text, x, y, ctx, vel = {x: 0, y: 0}){
     this.text = text;
-    ctx.font = '10pt sans-serif';
+    ctx.font = '12pt sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
-    this.height = 10 + PADDING * 2;
+    this.height = 12 + PADDING * 2;
 
     this.moveTo(x+this.width/2,y);
 
@@ -21,15 +21,13 @@ class Word{
       ctx.shadowColor = 'gray';
       ctx.shadowBlur = 12;
     }
-    ctx.fillStyle = 'skyblue';
+    ctx.fillStyle = 'aliceblue';
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
     //reset shadow
     ctx.shadowColor = 'rgba(0,0,0,0)';
     ctx.shadowBlur = 0;
     ctx.fillStyle = 'black';
     ctx.fillText(this.text, this.pos.x + PADDING, this.pos.y - PADDING + this.height);
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.pos.x + this.width/2, this.pos.y + this.height/2, 3, 3);
   }
 
   move(){

@@ -144,6 +144,8 @@ class Board{
     });
   }
   renderAll(ctx){
+    ctx.fillStyle='lightgray';
+    ctx.fillRect(0,0,this.width,this.height);
     this.words.forEach(word => {
       word.render(ctx);
     });
