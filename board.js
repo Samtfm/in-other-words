@@ -94,8 +94,11 @@ class Board{
     this.heldWord = null;
   }
 
-  addWord(text, pos={x:0, y:0}, vel={x:0,y:0}){
+  addWord(text, pos={x:this.width*0.5, y:this.height*0.5}, vel={x:-5,y:0}){
     this.words.push(new Word(text, pos.x, pos.y, this.ctx, vel));
+  }
+  clear(){
+    this.words = [];
   }
   handleDoubleClick(e){
     const x = e.clientX - this.rect.left;
