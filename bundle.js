@@ -1981,6 +1981,7 @@ var Board = function () {
 
     _classCallCheck(this, Board);
 
+    this.canvas = canvas;
     this.width = canvas.width;
     this.height = canvas.height;
     this.newWords = [];
@@ -2029,11 +2030,26 @@ var Board = function () {
   }
 
   _createClass(Board, [{
+    key: 'getCoords',
+    value: function getCoords(e) {
+      var x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+      var y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+      x -= this.canvas.offsetLeft;
+      y -= this.canvas.offsetTop;
+      return { x: x, y: y };
+    }
+  }, {
     key: 'startDrag',
     value: function startDrag(e) {
       e.preventDefault();
-      var x = e.clientX - this.rect.left;
-      var y = e.clientY - this.rect.top;
+
+      var _getCoords = this.getCoords(e),
+          x = _getCoords.x,
+          y = _getCoords.y;
+      // const x = e.clientX - this.rect.left;
+      // const y = e.clientY - this.rect.top;
+
+
       for (var i = 0; i < this.words.length; i++) {
         var word = this.words[i];
         if (word.hitTest(x, y)) {
@@ -2046,8 +2062,14 @@ var Board = function () {
   }, {
     key: 'onMouseMove',
     value: function onMouseMove(e) {
-      var x = e.clientX - this.rect.left;
-      var y = e.clientY - this.rect.top;
+      var _getCoords2 = this.getCoords(e),
+          x = _getCoords2.x,
+          y = _getCoords2.y;
+
+      // const x = e.clientX - this.rect.left;
+      // const y = e.clientY - this.rect.top;
+
+
       if (this.heldWord) {
         this.heldWord.moveTo(x, y);
       }
@@ -2103,8 +2125,14 @@ var Board = function () {
   }, {
     key: 'handleDoubleClick',
     value: function handleDoubleClick(e) {
-      var x = e.clientX - this.rect.left;
-      var y = e.clientY - this.rect.top;
+      var _getCoords3 = this.getCoords(e),
+          x = _getCoords3.x,
+          y = _getCoords3.y;
+
+      // const x = e.clientX - this.rect.left;
+      // const y = e.clientY - this.rect.top;
+
+
       for (var i = 0; i < this.words.length; i++) {
         var word = this.words[i];
         if (word.hitTest(x, y)) {
@@ -2196,12 +2224,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementById("canvas");
-  canvasEl.width = 800;
-  canvasEl.height = 600;
+  canvasEl.width = document.body.clientWidth;
+  canvasEl.height = document.body.clientHeight * .7;
 
   var submitButton = document.getElementById("submit-word");
   var wordField = document.getElementById("word-field");
   var thesaurus = new _thesaurus2.default(submitButton, wordField, canvasEl);
+
+  window.onresize = function (e) {};
 });
 var axios = __webpack_require__(2);
 window.axios = axios;

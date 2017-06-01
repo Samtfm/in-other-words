@@ -1,0 +1,51 @@
+html {
+  height: 100%;
+}
+body {
+  font-family: 'sans-serif';
+  height: 100%;
+  font-size: 20px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#96abff+0,3f4c6b+100 */
+  background: #96abff; /* Old browsers */
+  background: -moz-linear-gradient(top,  #96abff 0%, #3f4c6b 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #96abff 0%,#3f4c6b 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #96abff 0%,#3f4c6b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#96abff', endColorstr='#3f4c6b',GradientType=0 ); /* IE6-9 */
+
+}
+
+h1 {
+  font-size: 28px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+canvas {
+  margin: 0 auto;
+  display: block;
+}
+
+.footer{
+  margin: 10px auto;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+
+}
+button, input {
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+input[type=text]{
+  text-align: center;
+  margin-left: 20px;
+}
+.enter-word{
+  display: flex;
+
+}
+.word-field{
+
+  justify-content: flex-end;
+}
