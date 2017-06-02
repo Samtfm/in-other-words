@@ -17,12 +17,22 @@ body {
 
 h1 {
   font-family: 'Averia Serif Libre', cursive;
-  font-size: 35px;
+  font-size: 55px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
   color: white;
   background-color: black;
+}
+p{
+  margin: auto;
+  font-family: sans-serif;
+  font-weight: lighter;
+  line-height: 20px;
+  font-size: 16px;
+  /*text-align: center;*/
+  background-color: 'aliceblue';
+  margin: 5px;
 }
 
 canvas {
