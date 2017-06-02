@@ -2,9 +2,10 @@ html {
   height: 100%;
 }
 body {
-  font-family: 'sans-serif';
+  font-family: 'Cormorant Garamond', serif;
   height: 100%;
-  font-size: 20px;
+  font-size: 28px;
+    font-weight: 700;
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#96abff+0,3f4c6b+100 */
   background: #96abff; /* Old browsers */
   background: -moz-linear-gradient(top,  #96abff 0%, #3f4c6b 100%); /* FF3.6-15 */
@@ -15,10 +16,13 @@ body {
 }
 
 h1 {
-  font-size: 28px;
+  font-family: 'Averia Serif Libre', cursive;
+  font-size: 35px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
+  color: white;
+  background-color: black;
 }
 
 canvas {
@@ -36,6 +40,7 @@ canvas {
 button, input {
   padding: 4px 8px;
   border-radius: 3px;
+  margin: 4px;
 }
 input[type=text]{
   text-align: center;

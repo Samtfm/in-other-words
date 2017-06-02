@@ -2268,7 +2268,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var MIN_SPEED = 0.001;
 var FRICTION = 0.3;
-var PADDING = 6;
+var PADDING = 8;
 
 var BASE_COLOR = new _color2.default(256, 256, 180);
 var HIGHLIGHT_COLOR = new _color2.default(256, 256, 256);
@@ -2285,9 +2285,9 @@ var Word = function () {
 
     this.text = text;
     this.ctx = ctx;
-    ctx.font = '14pt sans-serif';
+    ctx.font = 'bold 22pt Cormorant Garamond, sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
-    this.height = 14 + PADDING * 2;
+    this.height = 22 + PADDING * 2;
     this.padding = PADDING;
 
     this.moveTo(x + this.width / 2, y);
@@ -2309,7 +2309,7 @@ var Word = function () {
     key: 'setPadding',
     value: function setPadding(pixels) {
       this.padding = pixels;
-      this.height = 14 + pixels * 2;
+      this.height = 22 + pixels * 2;
       this.width = this.ctx.measureText(this.text).width + this.padding * 2;
     }
   }, {
@@ -2334,7 +2334,7 @@ var Word = function () {
       }
 
       ctx.fillStyle = 'black';
-      ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - this.padding + this.height);
+      ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 2) + this.height);
     }
   }, {
     key: 'setExhausted',

@@ -6,19 +6,19 @@
     <script type="text/javascript" src='bundle.js'></script>
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Averia+Libre|Averia+Serif+Libre:700|Cormorant+Garamond:500,700" rel="stylesheet">
 
   </head>
   <body>
     <h1>In Other Words...</h1>
     <canvas id="canvas" width="300" height="300"></canvas>
+    <div class="footer">
+      <button type="button" id="clear-button">clear</button>
+      <form class="enter-word">
+        <input type="text" id="word-field" value="">
+        <input type="submit"
+        id='submit-word' value="Add Word">
+      </form>
+    </div>
   </body>
-  <div class="footer">
-    <button type="button" id="clear-button">clear</button>
-    <form class="enter-word">
-      <input type="text" id="word-field" value="">
-      <input type="submit"
-      id='submit-word' value="Add Word">
-    </form>
-  </div>
 </html>
