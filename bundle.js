@@ -1061,7 +1061,6 @@ var Thesaurus = function () {
     });
     submitButton.onclick = function (e) {
       e.preventDefault();
-      console.log(e.target);
       if (wordField.value !== '') {
         _this.board.addWord(wordField.value);
         wordField.value = '';
@@ -1071,17 +1070,9 @@ var Thesaurus = function () {
         });
       }
     };
-    // APIUtil.fetchRandomWords(5).then(res => {
-    //   this.board.addWords(res.data.map(datum => datum.word));
-    // }, err => console.log(err));
     APIUtil.requestRandomWords(5, function (words) {
       _this.board.addWords(words);
     });
-    // for (let i = 0; i < 4; i++) {
-    //   APIUtil.fetchRandomWord().then(res => {
-    //     this.board.addWord(res.data);
-    //   });
-    // }
   }
 
   _createClass(Thesaurus, [{
@@ -1103,15 +1094,6 @@ var Thesaurus = function () {
           wordObj.loading = false;
           callback(synonyms, wordObj);
         });
-        // APIUtil.fetchRelatedWords(wordObj.text).then(res => {
-        //   console.log(res);
-        //   let synonyms = res.data.find(relation => (
-        //     relation.relationshipType === "synonym"
-        //   ));
-        //   synonyms = synonyms || {words: []};
-        //   this.store[wordObj.text] = synonyms.words;
-        //   callback(synonyms.words, wordObj);
-        // });
       }
     }
   }]);
@@ -2019,18 +2001,11 @@ var Board = function () {
       var word = new Word('worrrddd' + i, Math.random() * this.width, Math.random() * this.height, this.ctx);
       this.words.push(word);
     }
-    var times = 0;
     var ticker = setInterval(function () {
       _this.ctx.clearRect(0, 0, _this.width, _this.height);
       _this.updateVelocities();
       _this.updatePositions();
       _this.renderAll(_this.ctx);
-      if (times > 10000) {
-        clearInterval(ticker);
-        _this.ctx.fillText('TIMEOUT', 100, 50);
-        console.log("TIMEOUT");
-      }
-      times++;
     }, 40);
   }
   // resizeCanvas(width, height){
@@ -2155,7 +2130,6 @@ var Board = function () {
       }
       newWords = newWords.slice(0, WORDS_PER_CLICK);
       if (newWords.length > 0) {
-        console.log(this.newWords);
         this.newWords.forEach(function (oldWord) {
           if (oldWord !== wordObj) oldWord.setOld();
         });
@@ -2380,8 +2354,6 @@ var randomWordStrings = exports.randomWordStrings = randomWords.map(function (ob
 "use strict";
 
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _color = __webpack_require__(29);
@@ -2404,7 +2376,6 @@ var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
 var GRAY_FILTER = new _color2.default(128, 128, 128, .7);
 
 var WHITE = new _color2.default(230, 230, 230);
-console.log(YELLOW.toString());
 var GREEN = new _color2.default(100, 256, 100);
 
 var Word = function () {
@@ -2428,13 +2399,7 @@ var Word = function () {
     this.frozen = false;
     this.color = TRANSPARENT;
     this.setColor(GREEN, .1);
-    // this.baseColor = WHITE;
     var i = 0;
-    // this.fade = setInterval(()=>{
-    //   if (i > 1) clearInterval(this.fade);
-    //   this.color = GREEN.mix(this.baseColor, i);
-    //   i += .01;
-    // }, 40);
   }
 
   _createClass(Word, [{
@@ -2470,13 +2435,11 @@ var Word = function () {
       if (this.filterFade) clearInterval(this.filterFade);
       var i = 0;
       var oldColor = this.filterColor;
-      console.log(_typeof(this.filterColor));
       this.filterFade = setInterval(function () {
         if (i >= .95) clearInterval(_this2.filterFade);
 
         _this2.filterColor = oldColor.mix(color, i);
         i += (1 - i) * factor;
-        console.log(_typeof(_this2.filterColor));
       }, 40);
     }
   }, {
@@ -2487,8 +2450,8 @@ var Word = function () {
   }, {
     key: 'setHappy',
     value: function setHappy() {
-      this.happy = true;
-      this.setFilter(YELLOW_FILTER);
+      // this.happy = true;
+      // this.setFilter(YELLOW_FILTER);
     }
   }, {
     key: 'render',
@@ -2497,16 +2460,6 @@ var Word = function () {
       if (options.shadow) {
         ctx.shadowColor = 'gray';
         ctx.shadowBlur = 12;
-      }
-      // ctx.fillStyle = 'black';
-      // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-      // ctx.fillStyle = options.newWord ? "yellow" : "aliceblue";
-      if (this.happy) {
-        // ctx.shadowColor = YELLOW_FILTER.toString();
-        // ctx.shadowBlur = 10;
-        // ctx.fillRect(this.pos.x+2-6, this.pos.y+4-5, (this.width-4)*.6, (this.height-4)*.8);
-        // ctx.fillRect(this.pos.x+2-2, this.pos.y+4+8, (this.width-4)*.6, (this.height-4)*.8);
-
       }
       ctx.fillStyle = this.color.toString();
 
@@ -2517,26 +2470,10 @@ var Word = function () {
       ctx.shadowColor = 'rgba(0,0,0,0)';
       ctx.shadowBlur = 0;
 
-      // if (this.exhausted) {
-      //   ctx.fillStyle = 'rgba(50,50,0,.4)';
-      //   ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-      // }
-
-
       ctx.fillStyle = 'black';
       ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 4) + this.height);
 
-      // ctx.fillStyle = this.filterColor.toString();
-      // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-
-
       // var gradient = ctx.createLinearGradient(0, this.pos.y, 0, this.pos.y+this.height);
-      // gradient.addColorStop(.4, TRANSPARENT.toString());
-      //
-      // gradient.addColorStop(.8, this.filterColor.toString());
-      // gradient.addColorStop(1, TRANSPARENT.toString());
-
-      // var gradient = ctx.createRadialGradient(this.pos.x+this.width*0.5, this.pos.y+this.height*0.5, .1,this.pos.x+this.width*0.5, this.pos.y+this.height*0.5, this.width*.7);
       // gradient.addColorStop(.4, TRANSPARENT.toString());
       //
       // gradient.addColorStop(.8, this.filterColor.toString());
@@ -2548,10 +2485,8 @@ var Word = function () {
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      this.setFilter(GRAY_FILTER);
-      this.happy = false;
-      // this.baseColor = new Color(230,230,230);
-      // this.color = this.baseColor;
+      // this.setFilter(GRAY_FILTER);
+      // this.happy = false;
     }
   }, {
     key: 'resetFilter',
