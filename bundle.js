@@ -1054,6 +1054,7 @@ var Thesaurus = function () {
     clearButton.onclick = function (e) {
       e.preventDefault();
       _this.board.clearUntouched();
+      wordField.focus();
     };
     document.addEventListener("fetchRelatedWords", function (e) {
       e.detail.startInflation();
@@ -1065,9 +1066,9 @@ var Thesaurus = function () {
         _this.board.addWord(wordField.value);
         wordField.value = '';
       } else {
-        APIUtil.requestRandomWords(1, function (words) {
-          _this.board.addWord(words[0]);
-        });
+        // APIUtil.requestRandomWords(1, words => {
+        //   this.board.addWord(words[0]);
+        // });
       }
     };
     APIUtil.requestRandomWords(5, function (words) {
@@ -2485,7 +2486,13 @@ var Word = function () {
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      this.setFilter(GRAY_FILTER);
+      var _this3 = this;
+
+      this.setFilter(TRANSPARENT, .8);
+
+      setTimeout(function () {
+        _this3.setFilter(GRAY_FILTER, .2);
+      }, 500);
       this.happy = false;
     }
   }, {
@@ -2497,15 +2504,15 @@ var Word = function () {
   }, {
     key: 'startInflation',
     value: function startInflation() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.inflation = setInterval(function () {
-        if (_this3.padding < 12) {
-          _this3.padding += .3;
+        if (_this4.padding < 12) {
+          _this4.padding += .3;
         }
         // this.padding += (14 - this.padding)*0.2;
         // const newPadding = this.padding +
-        _this3.setPadding(_this3.padding);
+        _this4.setPadding(_this4.padding);
       }, 40);
     }
   }, {
@@ -2534,11 +2541,11 @@ var Word = function () {
   }, {
     key: 'shortFreeze',
     value: function shortFreeze() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.frozen = true;
       setTimeout(function () {
-        return _this4.frozen = false;
+        return _this5.frozen = false;
       }, 500);
     }
   }, {
