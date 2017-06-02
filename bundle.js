@@ -2002,9 +2002,9 @@ var Board = function () {
       width: this.width + 800,
       height: 100
     }];
+    this.rect = canvas.getBoundingClientRect();
     this.ctx = canvas.getContext("2d");
     this.words = [];
-    this.rect = canvas.getBoundingClientRect();
     canvas.onmousemove = this.onMouseMove.bind(this);
     canvas.onmousedown = this.startDrag.bind(this);
     canvas.ondblclick = this.handleDoubleClick.bind(this);
@@ -2024,10 +2024,39 @@ var Board = function () {
       if (times > 10000) {
         clearInterval(ticker);
         _this.ctx.fillText('TIMEOUT', 100, 50);
+        console.log("TIMEOUT");
       }
       times++;
     }, 40);
   }
+  // resizeCanvas(width, height){
+  //   this.width = width;
+  //   this.height = height;
+  //   this.walls = [
+  //     { //left
+  //       pos: {x: -100, y: -400},
+  //       width: 100,
+  //       height: this.height + 800
+  //     },
+  //     { //right
+  //       pos: {x: this.width, y: -400},
+  //       width: 100,
+  //       height: this.height + 800
+  //     },
+  //     { //top
+  //       pos: {x: -400, y: -100},
+  //       width: this.width + 800,
+  //       height: 100
+  //     },
+  //     { //bottom
+  //       pos: {x: -400, y: this.height},
+  //       width: this.width + 800,
+  //       height: 100
+  //     }
+  //   ];
+  //   this.rect = this.canvas.getBoundingClientRect();
+  // }
+
 
   _createClass(Board, [{
     key: 'getCoords',
@@ -2041,6 +2070,7 @@ var Board = function () {
   }, {
     key: 'startDrag',
     value: function startDrag(e) {
+      this.dragging = false;
       e.preventDefault();
 
       var _getCoords = this.getCoords(e),
@@ -2055,7 +2085,6 @@ var Board = function () {
         if (word.hitTest(x, y)) {
           this.heldWord = word;
           this.heldWord.active = false;
-          this.heldWord.touch();
           break;
         }
       }
@@ -2063,6 +2092,8 @@ var Board = function () {
   }, {
     key: 'onMouseMove',
     value: function onMouseMove(e) {
+      this.dragging = true;
+
       var _getCoords2 = this.getCoords(e),
           x = _getCoords2.x,
           y = _getCoords2.y;
@@ -2081,7 +2112,9 @@ var Board = function () {
       if (this.heldWord) {
         this.heldWord.active = true;
         this.heldWord.shortFreeze();
+        if (!this.dragging) this.heldWord.touch();
       }
+      this.dragging = false;
       this.heldWord = null;
     }
   }, {
@@ -2106,17 +2139,23 @@ var Board = function () {
       });
       if (wordObj && newWords.length <= WORDS_PER_CLICK) {
         wordObj.setExhausted();
-        console.log(wordObj.setExhausted);
+      } else if (wordObj) {
+        wordObj.setHappy();
       }
       var pos = wordObj ? wordObj.pos : { x: this.width * 0.5, y: this.height * 0.5 };
-
       newWords = newWords.slice(0, WORDS_PER_CLICK);
-      this.newWords = newWords;
-      newWords.forEach(function (word) {
-        var angle = Math.random() * Math.PI * 2;
-        var vel = { x: Math.cos(angle) * 20, y: Math.sin(angle) * 20 };
-        _this2.addWord(word, pos, vel);
-      });
+      if (newWords.length > 0) {
+        console.log(this.newWords);
+        this.newWords.forEach(function (oldWord) {
+          if (oldWord !== wordObj) oldWord.setOld();
+        });
+        this.newWords = [];
+        newWords.forEach(function (word) {
+          var angle = Math.random() * Math.PI * 2;
+          var vel = { x: Math.cos(angle) * 20, y: Math.sin(angle) * 20 };
+          _this2.addWord(word, pos, vel);
+        });
+      }
     }
   }, {
     key: 'clear',
@@ -2127,10 +2166,10 @@ var Board = function () {
     key: 'clearUntouched',
     value: function clearUntouched() {
       this.words = this.words.filter(function (word) {
-        return word.touched;
+        return word.selected;
       });
       this.words.forEach(function (word) {
-        word.exhausted = false;
+        word.resetFilter();
       });
     }
   }, {
@@ -2148,6 +2187,7 @@ var Board = function () {
         var word = this.words[i];
         if (word.hitTest(x, y)) {
           word.shortFreeze();
+          word.touch({ forceTouch: true });
           var fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
           document.dispatchEvent(fetchEvent);
           // for (var i = 0; i < 5; i++) {
@@ -2241,7 +2281,9 @@ document.addEventListener("DOMContentLoaded", function () {
   var wordField = document.getElementById("word-field");
   var thesaurus = new _thesaurus2.default(submitButton, wordField, canvasEl);
 
-  window.onresize = function (e) {};
+  window.onresize = function (e) {
+    // thesaurus.board.resizeCanvas(document.body.clientWidth, document.body.clientHeight);;
+  };
 });
 var axios = __webpack_require__(2);
 window.axios = axios;
@@ -2255,6 +2297,8 @@ window.axios = axios;
 
 "use strict";
 
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -2270,19 +2314,24 @@ var MIN_SPEED = 0.001;
 var FRICTION = 0.3;
 var PADDING = 8;
 
-var BASE_COLOR = new _color2.default(256, 256, 180);
-var HIGHLIGHT_COLOR = new _color2.default(256, 256, 256);
-console.log(BASE_COLOR.toString());
-var NEW_COLOR = new _color2.default(100, 256, 100);
+var YELLOW = new _color2.default(240, 240, 140);
+var TRANSPARENT = new _color2.default(128, 128, 128, 0);
+var BRIGHT_YELLOW = new _color2.default(256, 256, 210, .3);
+var YELLOW_FILTER = new _color2.default(80, 256, 0, .5);
+// const GRAY_FILTER = new Color(0,0,0,.4);
+var GRAY_FILTER = new _color2.default(128, 128, 128, .7);
+
+var WHITE = new _color2.default(230, 230, 230);
+console.log(YELLOW.toString());
+var GREEN = new _color2.default(100, 256, 100);
 
 var Word = function () {
   function Word(text, x, y, ctx) {
-    var _this = this;
-
     var vel = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : { x: 0, y: 0 };
 
     _classCallCheck(this, Word);
 
+    this.filterColor = TRANSPARENT;
     this.text = text;
     this.ctx = ctx;
     ctx.font = 'bold 22pt Cormorant Garamond, sans-serif';
@@ -2295,14 +2344,15 @@ var Word = function () {
     this.vel = vel;
     this.active = true;
     this.frozen = false;
-    this.color = NEW_COLOR;
-    this.baseColor = HIGHLIGHT_COLOR;
+    this.color = WHITE;
+    this.setColor(GREEN, .1);
+    // this.baseColor = WHITE;
     var i = 0;
-    this.fade = setInterval(function () {
-      if (i > 1) clearInterval(_this.fade);
-      _this.color = NEW_COLOR.mix(_this.baseColor, i);
-      i += .01;
-    }, 40);
+    // this.fade = setInterval(()=>{
+    //   if (i > 1) clearInterval(this.fade);
+    //   this.color = GREEN.mix(this.baseColor, i);
+    //   i += .01;
+    // }, 40);
   }
 
   _createClass(Word, [{
@@ -2313,6 +2363,51 @@ var Word = function () {
       this.width = this.ctx.measureText(this.text).width + this.padding * 2;
     }
   }, {
+    key: 'setColor',
+    value: function setColor(color) {
+      var _this = this;
+
+      var factor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .4;
+
+      if (this.fade) clearInterval(this.fade);
+      var i = 0;
+      var oldColor = this.color;
+      this.fade = setInterval(function () {
+        if (i >= .95) clearInterval(_this.fade);
+        _this.color = oldColor.mix(color, i);
+        i += (1 - i) * factor;
+      }, 40);
+    }
+  }, {
+    key: 'setFilter',
+    value: function setFilter(color) {
+      var _this2 = this;
+
+      var factor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .4;
+
+      if (this.filterFade) clearInterval(this.filterFade);
+      var i = 0;
+      var oldColor = this.filterColor;
+      console.log(_typeof(this.filterColor));
+      this.filterFade = setInterval(function () {
+        if (i >= .95) clearInterval(_this2.filterFade);
+
+        _this2.filterColor = oldColor.mix(color, i);
+        i += (1 - i) * factor;
+        console.log(_typeof(_this2.filterColor));
+      }, 40);
+    }
+  }, {
+    key: 'setOld',
+    value: function setOld() {
+      this.setColor(WHITE, .1);
+    }
+  }, {
+    key: 'setHappy',
+    value: function setHappy() {
+      this.setFilter(YELLOW_FILTER);
+    }
+  }, {
     key: 'render',
     value: function render(ctx, options) {
       options = options || {};
@@ -2320,42 +2415,67 @@ var Word = function () {
         ctx.shadowColor = 'gray';
         ctx.shadowBlur = 12;
       }
+      ctx.fillStyle = 'black';
+      ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
       // ctx.fillStyle = options.newWord ? "yellow" : "aliceblue";
       ctx.fillStyle = this.color.toString();
 
-      ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      ctx.fillRect(this.pos.x + 2, this.pos.y + 2, this.width - 4, this.height - 4);
       //reset shadow
       ctx.shadowColor = 'rgba(0,0,0,0)';
       ctx.shadowBlur = 0;
 
-      if (this.exhausted) {
-        ctx.fillStyle = 'rgba(50,50,0,.4)';
-        ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-      }
+      // if (this.exhausted) {
+      //   ctx.fillStyle = 'rgba(50,50,0,.4)';
+      //   ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      // }
+
 
       ctx.fillStyle = 'black';
       ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 2) + this.height);
+
+      // ctx.fillStyle = this.filterColor.toString();
+      // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+
+
+      var gradient = ctx.createLinearGradient(0, this.pos.y, 0, this.pos.y + this.height);
+      gradient.addColorStop(0, TRANSPARENT.toString());
+      try {
+
+        gradient.addColorStop(.9, this.filterColor.toString());
+        gradient.addColorStop(1, TRANSPARENT.toString());
+      } catch (e) {
+        console.log(_typeof(this.filterColor));
+
+        console.log(this.filterColor.toString());
+      }
+      ctx.fillStyle = gradient;
+      ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
     }
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      this.exhausted = true;
+      this.setFilter(GRAY_FILTER);
       // this.baseColor = new Color(230,230,230);
       // this.color = this.baseColor;
     }
   }, {
+    key: 'resetFilter',
+    value: function resetFilter() {
+      this.setFilter(TRANSPARENT);
+    }
+  }, {
     key: 'startInflation',
     value: function startInflation() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.inflation = setInterval(function () {
-        console.log('yehh');
-        if (_this2.padding < 12) {
-          _this2.padding += .3;
+        if (_this3.padding < 12) {
+          _this3.padding += .3;
         }
         // this.padding += (14 - this.padding)*0.2;
         // const newPadding = this.padding +
-        _this2.setPadding(_this2.padding);
+        _this3.setPadding(_this3.padding);
       }, 40);
     }
   }, {
@@ -2384,20 +2504,31 @@ var Word = function () {
   }, {
     key: 'shortFreeze',
     value: function shortFreeze() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.frozen = true;
       setTimeout(function () {
-        return _this3.frozen = false;
+        return _this4.frozen = false;
       }, 500);
     }
   }, {
     key: 'touch',
     value: function touch() {
-      this.touched = true;
-      this.baseColor = BASE_COLOR;
-      this.color = this.baseColor;
-      if (this.fade) clearInterval(this.fade);
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      if (options.forceUntouch) this.selected = true;
+      if (options.forceTouch) this.selected = false;
+
+      if (this.selected) {
+        this.setColor(WHITE);
+        this.selected = false;
+      } else {
+        this.setColor(YELLOW);
+        this.selected = true;
+      }
+      // this.baseColor = YELLOW;
+      // this.color = this.baseColor;
+      // if (this.fade) clearInterval(this.fade);
     }
   }, {
     key: 'moveTo',
@@ -4564,7 +4695,7 @@ var Color = function () {
       var r = Math.floor(other.values.r * amount + this.values.r * (1 - amount));
       var g = Math.floor(other.values.g * amount + this.values.g * (1 - amount));
       var b = Math.floor(other.values.b * amount + this.values.b * (1 - amount));
-      var a = Math.floor(other.values.a * amount + this.values.a * (1 - amount));
+      var a = Math.floor((other.values.a * amount + this.values.a * (1 - amount)) * 100) * .01;
       return new Color(r, g, b, a);
     }
   }, {
