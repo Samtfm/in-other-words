@@ -1053,7 +1053,7 @@ var Thesaurus = function () {
 
     clearButton.onclick = function (e) {
       e.preventDefault();
-      _this.board.clear();
+      _this.board.clearUntouched();
     };
     document.addEventListener("fetchRelatedWords", function (e) {
       e.detail.startInflation();
@@ -1973,7 +1973,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Word = __webpack_require__(30);
 
-var WORDS_PER_CLICK = 4;
+var WORDS_PER_CLICK = 6;
 
 var Board = function () {
   function Board(canvas) {
@@ -2055,6 +2055,7 @@ var Board = function () {
         if (word.hitTest(x, y)) {
           this.heldWord = word;
           this.heldWord.active = false;
+          this.heldWord.touch();
           break;
         }
       }
@@ -2121,6 +2122,16 @@ var Board = function () {
     key: 'clear',
     value: function clear() {
       this.words = [];
+    }
+  }, {
+    key: 'clearUntouched',
+    value: function clearUntouched() {
+      this.words = this.words.filter(function (word) {
+        return word.touched;
+      });
+      this.words.forEach(function (word) {
+        word.exhausted = false;
+      });
     }
   }, {
     key: 'handleDoubleClick',
@@ -2194,7 +2205,7 @@ var Board = function () {
     value: function renderAll(ctx) {
       var _this4 = this;
 
-      ctx.fillStyle = 'lightgray';
+      ctx.fillStyle = 'rgba(0,0,0,.6)';
       ctx.fillRect(0, 0, this.width, this.height);
       this.words.forEach(function (word) {
         var isNew = _this4.newWords.includes(word);
@@ -2226,7 +2237,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementById("canvas");
   canvasEl.width = document.body.clientWidth;
   canvasEl.height = document.body.clientHeight * .7;
-
   var submitButton = document.getElementById("submit-word");
   var wordField = document.getElementById("word-field");
   var thesaurus = new _thesaurus2.default(submitButton, wordField, canvasEl);
@@ -2260,7 +2270,8 @@ var MIN_SPEED = 0.001;
 var FRICTION = 0.3;
 var PADDING = 6;
 
-var BASE_COLOR = new _color2.default(256, 256, 256);
+var BASE_COLOR = new _color2.default(256, 256, 180);
+var HIGHLIGHT_COLOR = new _color2.default(256, 256, 256);
 console.log(BASE_COLOR.toString());
 var NEW_COLOR = new _color2.default(100, 256, 100);
 
@@ -2285,10 +2296,10 @@ var Word = function () {
     this.active = true;
     this.frozen = false;
     this.color = NEW_COLOR;
-    this.baseColor = BASE_COLOR;
+    this.baseColor = HIGHLIGHT_COLOR;
     var i = 0;
-    var fade = setInterval(function () {
-      if (i > 1) clearInterval(fade);
+    this.fade = setInterval(function () {
+      if (i > 1) clearInterval(_this.fade);
       _this.color = NEW_COLOR.mix(_this.baseColor, i);
       i += .01;
     }, 40);
@@ -2316,14 +2327,21 @@ var Word = function () {
       //reset shadow
       ctx.shadowColor = 'rgba(0,0,0,0)';
       ctx.shadowBlur = 0;
+
+      if (this.exhausted) {
+        ctx.fillStyle = 'rgba(50,50,0,.4)';
+        ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      }
+
       ctx.fillStyle = 'black';
       ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - this.padding + this.height);
     }
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      this.baseColor = new _color2.default(230, 230, 230);
-      this.color = this.baseColor;
+      this.exhausted = true;
+      // this.baseColor = new Color(230,230,230);
+      // this.color = this.baseColor;
     }
   }, {
     key: 'startInflation',
@@ -2372,6 +2390,14 @@ var Word = function () {
       setTimeout(function () {
         return _this3.frozen = false;
       }, 500);
+    }
+  }, {
+    key: 'touch',
+    value: function touch() {
+      this.touched = true;
+      this.baseColor = BASE_COLOR;
+      this.color = this.baseColor;
+      if (this.fade) clearInterval(this.fade);
     }
   }, {
     key: 'moveTo',
