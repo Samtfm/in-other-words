@@ -10,16 +10,11 @@
 
   </head>
   <body>
-    <h1>In Other Words...</h1>
-    <div class="instructions">
+    <div class="title">
+      <h1>In Other Words...</h1>
+      <h2>an interactive thesaurus</h2>
 
-      <p>
-        Double click a word to start exploring synonyms.<br>
-        Click and drag to rearrange<br>
-        Single click a word to highlight/un-highlight. (highlighted words won't clear)<br>
-      </p>
     </div>
-    <canvas id="canvas" width="300" height="300"></canvas>
     <div class="footer">
       <button type="button" id="clear-button">Clear</button>
       <form class="enter-word">
@@ -28,5 +23,13 @@
         id='submit-word' value="Add Word">
       </form>
     </div>
+    <div class="instructions" id="instructions">
+
+      <p>
+        Double click a word to start exploring synonyms.<br>
+        Single click a word to highlight/un-highlight. (highlighted words won't clear)<br>
+      </p>
+    </div>
+    <canvas id="canvas" width="300" height="300"></canvas>
   </body>
 </html>

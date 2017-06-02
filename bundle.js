@@ -2009,34 +2009,6 @@ var Board = function () {
       _this.renderAll(_this.ctx);
     }, 40);
   }
-  // resizeCanvas(width, height){
-  //   this.width = width;
-  //   this.height = height;
-  //   this.walls = [
-  //     { //left
-  //       pos: {x: -100, y: -400},
-  //       width: 100,
-  //       height: this.height + 800
-  //     },
-  //     { //right
-  //       pos: {x: this.width, y: -400},
-  //       width: 100,
-  //       height: this.height + 800
-  //     },
-  //     { //top
-  //       pos: {x: -400, y: -100},
-  //       width: this.width + 800,
-  //       height: 100
-  //     },
-  //     { //bottom
-  //       pos: {x: -400, y: this.height},
-  //       width: this.width + 800,
-  //       height: 100
-  //     }
-  //   ];
-  //   this.rect = this.canvas.getBoundingClientRect();
-  // }
-
 
   _createClass(Board, [{
     key: 'getCoords',
@@ -2119,8 +2091,6 @@ var Board = function () {
       });
       if (wordObj && newWords.length <= WORDS_PER_CLICK) {
         wordObj.setExhausted();
-      } else if (wordObj) {
-        wordObj.setHappy();
       }
       var pos = void 0;
       if (wordObj) {
@@ -2164,10 +2134,6 @@ var Board = function () {
           x = _getCoords3.x,
           y = _getCoords3.y;
 
-      // const x = e.clientX - this.rect.left;
-      // const y = e.clientY - this.rect.top;
-
-
       for (var i = 0; i < this.words.length; i++) {
         var word = this.words[i];
         if (word.hitTest(x, y)) {
@@ -2175,11 +2141,6 @@ var Board = function () {
           word.touch({ forceTouch: true });
           var fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
           document.dispatchEvent(fetchEvent);
-          // for (var i = 0; i < 5; i++) {
-          //   const angle = Math.random()*Math.PI*2;
-          //   const vel = {x: Math.cos(angle)*20, y: Math.sin(angle)*20};
-          //   this.addWord("I'm related!", word.pos, vel);
-          // }
           break;
         }
       }
@@ -2381,6 +2342,8 @@ var GREEN = new _color2.default(100, 256, 100);
 
 var Word = function () {
   function Word(text, x, y, ctx) {
+    var _this = this;
+
     var vel = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : { x: 0, y: 0 };
 
     _classCallCheck(this, Word);
@@ -2393,13 +2356,16 @@ var Word = function () {
     this.height = 28 + PADDING * 2;
     this.padding = PADDING;
 
-    this.moveTo(x - this.width * 0.5, y - this.height * 0.5);
+    this.moveTo(x - this.width * 0.1, y - this.height * 0.5);
 
     this.vel = vel;
     this.active = true;
     this.frozen = false;
     this.color = TRANSPARENT;
-    this.setColor(GREEN, .1);
+    this.setColor(GREEN, .2, function () {
+      _this.setColorLinear(WHITE, .01);
+    });
+
     var i = 0;
   }
 
@@ -2413,23 +2379,46 @@ var Word = function () {
   }, {
     key: 'setColor',
     value: function setColor(color) {
-      var _this = this;
+      var _this2 = this;
 
       var factor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .4;
+      var callback = arguments[2];
 
       if (this.fade) clearInterval(this.fade);
       var i = 0;
       var oldColor = this.color;
       this.fade = setInterval(function () {
-        if (i >= .95) clearInterval(_this.fade);
-        _this.color = oldColor.mix(color, i);
+        if (i >= .95) {
+          clearInterval(_this2.fade);
+          if (callback) callback();
+        }
+        _this2.color = oldColor.mix(color, i);
         i += (1 - i) * factor;
+      }, 40);
+    }
+  }, {
+    key: 'setColorLinear',
+    value: function setColorLinear(color) {
+      var _this3 = this;
+
+      var increment = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .05;
+
+      if (this.fade) clearInterval(this.fade);
+      var i = 0;
+      var oldColor = this.color;
+      this.fade = setInterval(function () {
+        if (i >= 1) {
+          clearInterval(_this3.fade);
+          i = 1;
+        }
+        _this3.color = oldColor.mix(color, i);
+        i += increment;
       }, 40);
     }
   }, {
     key: 'setFilter',
     value: function setFilter(color) {
-      var _this2 = this;
+      var _this4 = this;
 
       var factor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : .4;
 
@@ -2437,9 +2426,9 @@ var Word = function () {
       var i = 0;
       var oldColor = this.filterColor;
       this.filterFade = setInterval(function () {
-        if (i >= .95) clearInterval(_this2.filterFade);
+        if (i >= .95) clearInterval(_this4.filterFade);
 
-        _this2.filterColor = oldColor.mix(color, i);
+        _this4.filterColor = oldColor.mix(color, i);
         i += (1 - i) * factor;
       }, 40);
     }
@@ -2447,12 +2436,6 @@ var Word = function () {
     key: 'setOld',
     value: function setOld() {
       this.setColor(WHITE, .1);
-    }
-  }, {
-    key: 'setHappy',
-    value: function setHappy() {
-      // this.happy = true;
-      // this.setFilter(YELLOW_FILTER);
     }
   }, {
     key: 'render',
@@ -2464,34 +2447,30 @@ var Word = function () {
       }
       ctx.fillStyle = this.color.toString();
 
-      // ctx.fillRect(this.pos.x+2, this.pos.y+2, this.width-4, this.height-4);
+      //main color
       ctx.fillRect(this.pos.x + 2, this.pos.y + 2, this.width - 4, this.height - 4);
 
       //reset shadow
       ctx.shadowColor = 'rgba(0,0,0,0)';
       ctx.shadowBlur = 0;
 
+      //write text
       ctx.fillStyle = 'black';
       ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 4) + this.height);
 
-      // var gradient = ctx.createLinearGradient(0, this.pos.y, 0, this.pos.y+this.height);
-      // gradient.addColorStop(.4, TRANSPARENT.toString());
-      //
-      // gradient.addColorStop(.8, this.filterColor.toString());
-      // gradient.addColorStop(1, TRANSPARENT.toString());
-
+      //exhausted word filter;
       ctx.fillStyle = this.filterColor;
       ctx.fillRect(this.pos.x + 2, this.pos.y + 2, this.width - 4, this.height - 4);
     }
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      var _this3 = this;
+      var _this5 = this;
 
       this.setFilter(TRANSPARENT, .8);
 
       setTimeout(function () {
-        _this3.setFilter(GRAY_FILTER, .2);
+        _this5.setFilter(GRAY_FILTER, .2);
       }, 500);
       this.happy = false;
     }
@@ -2504,15 +2483,13 @@ var Word = function () {
   }, {
     key: 'startInflation',
     value: function startInflation() {
-      var _this4 = this;
+      var _this6 = this;
 
       this.inflation = setInterval(function () {
-        if (_this4.padding < 12) {
-          _this4.padding += .3;
+        if (_this6.padding < 12) {
+          _this6.padding += .3;
         }
-        // this.padding += (14 - this.padding)*0.2;
-        // const newPadding = this.padding +
-        _this4.setPadding(_this4.padding);
+        _this6.setPadding(_this6.padding);
       }, 40);
     }
   }, {
@@ -2541,11 +2518,11 @@ var Word = function () {
   }, {
     key: 'shortFreeze',
     value: function shortFreeze() {
-      var _this5 = this;
+      var _this7 = this;
 
       this.frozen = true;
       setTimeout(function () {
-        return _this5.frozen = false;
+        return _this7.frozen = false;
       }, 500);
     }
   }, {
@@ -2563,9 +2540,6 @@ var Word = function () {
         this.setColor(YELLOW);
         this.selected = true;
       }
-      // this.baseColor = YELLOW;
-      // this.color = this.baseColor;
-      // if (this.fade) clearInterval(this.fade);
     }
   }, {
     key: 'moveTo',
@@ -2597,6 +2571,7 @@ var Word = function () {
       // check for box collision
       if (this.pos.x + this.width > otherWord.pos.x && this.pos.x < otherWord.pos.x + otherWord.width && this.pos.y + this.height > otherWord.pos.y && this.pos.y < otherWord.pos.y + otherWord.height) {
 
+        //define variables for determining overlap
         var thisRight = this.pos.x + this.width;
         var thisLeft = this.pos.x;
         var otherRight = otherWord.pos.x + otherWord.width;
