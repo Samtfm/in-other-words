@@ -1065,6 +1065,10 @@ var Thesaurus = function () {
       if (wordField.value !== '') {
         _this.board.addWord(wordField.value);
         wordField.value = '';
+      } else {
+        APIUtil.requestRandomWords(1, function (words) {
+          _this.board.addWord(words[0]);
+        });
       }
     };
     // APIUtil.fetchRandomWords(5).then(res => {
@@ -2245,7 +2249,7 @@ var Board = function () {
     value: function renderAll(ctx) {
       var _this4 = this;
 
-      ctx.fillStyle = 'rgba(0,0,0,.6)';
+      ctx.fillStyle = 'rgba(0,0,0,0)';
       ctx.fillRect(0, 0, this.width, this.height);
       this.words.forEach(function (word) {
         var isNew = _this4.newWords.includes(word);
@@ -2276,7 +2280,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementById("canvas");
   canvasEl.width = document.body.clientWidth;
-  canvasEl.height = document.body.clientHeight * .7;
+  canvasEl.height = document.body.clientHeight * .6;
   var submitButton = document.getElementById("submit-word");
   var wordField = document.getElementById("word-field");
   var thesaurus = new _thesaurus2.default(submitButton, wordField, canvasEl);
@@ -2337,15 +2341,15 @@ var Word = function () {
     this.ctx = ctx;
     ctx.font = 'bold 22pt Cormorant Garamond, sans-serif';
     this.width = ctx.measureText(this.text).width + PADDING * 2;
-    this.height = 22 + PADDING * 2;
+    this.height = 28 + PADDING * 2;
     this.padding = PADDING;
 
-    this.moveTo(x + this.width / 2, y);
+    this.moveTo(x - this.width * 0.5, y - this.height * 0.5);
 
     this.vel = vel;
     this.active = true;
     this.frozen = false;
-    this.color = WHITE;
+    this.color = TRANSPARENT;
     this.setColor(GREEN, .1);
     // this.baseColor = WHITE;
     var i = 0;
@@ -2360,7 +2364,7 @@ var Word = function () {
     key: 'setPadding',
     value: function setPadding(pixels) {
       this.padding = pixels;
-      this.height = 22 + pixels * 2;
+      this.height = 28 + pixels * 2;
       this.width = this.ctx.measureText(this.text).width + this.padding * 2;
     }
   }, {
@@ -2416,12 +2420,14 @@ var Word = function () {
         ctx.shadowColor = 'gray';
         ctx.shadowBlur = 12;
       }
-      ctx.fillStyle = 'black';
-      ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      // ctx.fillStyle = 'black';
+      // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
       // ctx.fillStyle = options.newWord ? "yellow" : "aliceblue";
       ctx.fillStyle = this.color.toString();
 
-      ctx.fillRect(this.pos.x + 2, this.pos.y + 2, this.width - 4, this.height - 4);
+      // ctx.fillRect(this.pos.x+2, this.pos.y+2, this.width-4, this.height-4);
+      ctx.fillRect(this.pos.x + 2, this.pos.y + 4, this.width - 4, this.height - 4);
+
       //reset shadow
       ctx.shadowColor = 'rgba(0,0,0,0)';
       ctx.shadowBlur = 0;
@@ -2433,17 +2439,17 @@ var Word = function () {
 
 
       ctx.fillStyle = 'black';
-      ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 2) + this.height);
+      ctx.fillText(this.text, this.pos.x + this.padding, this.pos.y - (this.padding + 4) + this.height);
 
       // ctx.fillStyle = this.filterColor.toString();
       // ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
 
 
       var gradient = ctx.createLinearGradient(0, this.pos.y, 0, this.pos.y + this.height);
-      gradient.addColorStop(0, TRANSPARENT.toString());
+      gradient.addColorStop(.4, TRANSPARENT.toString());
       try {
 
-        gradient.addColorStop(.9, this.filterColor.toString());
+        gradient.addColorStop(.8, this.filterColor.toString());
         gradient.addColorStop(1, TRANSPARENT.toString());
       } catch (e) {
         console.log(_typeof(this.filterColor));
@@ -2451,7 +2457,7 @@ var Word = function () {
         console.log(this.filterColor.toString());
       }
       ctx.fillStyle = gradient;
-      ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      ctx.fillRect(this.pos.x + 2, this.pos.y + 4, this.width - 4, this.height);
     }
   }, {
     key: 'setExhausted',
