@@ -33,7 +33,7 @@ h1 {
   margin: auto;
 }
 p{
-  background-color: rgba(220,256,220,.7);
+  background-color: rgba(235,256,225,.8);
   /*margin: 0 auto;*/
   display: inline-block;
   font-family: sans-serif;
@@ -63,7 +63,7 @@ button, input {
   padding: 4px 8px;
   border-radius: 3px;
   margin: 4px;
-  background-color: rgba(220,256,220,.9);
+  background-color: rgba(235,256,235,.9);
 }
 input[type=text]{
   text-align: center;

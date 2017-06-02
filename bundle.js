@@ -2100,7 +2100,7 @@ var Board = function () {
     key: 'addWord',
     value: function addWord(text) {
       var pos = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : { x: this.width * 0.5, y: this.height * 0.5 };
-      var vel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : { x: -5, y: 0 };
+      var vel = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : { x: 0, y: 0 };
 
       var word = new Word(text, pos.x, pos.y, this.ctx, vel);
       this.words.push(word);
@@ -2373,7 +2373,7 @@ var TRANSPARENT = new _color2.default(128, 128, 128, 0);
 var BRIGHT_YELLOW = new _color2.default(256, 256, 210, .3);
 var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
 // const GRAY_FILTER = new Color(0,0,0,.4);
-var GRAY_FILTER = new _color2.default(128, 128, 128, .7);
+var GRAY_FILTER = new _color2.default(128, 128, 128, .3);
 
 var WHITE = new _color2.default(230, 230, 230);
 var GREEN = new _color2.default(100, 256, 100);
@@ -2479,14 +2479,14 @@ var Word = function () {
       // gradient.addColorStop(.8, this.filterColor.toString());
       // gradient.addColorStop(1, TRANSPARENT.toString());
 
-      // ctx.fillStyle = gradient;
-      // ctx.fillRect(this.pos.x+2, this.pos.y+4, this.width-4, this.height-4);
+      ctx.fillStyle = this.filterColor;
+      ctx.fillRect(this.pos.x + 2, this.pos.y + 2, this.width - 4, this.height - 4);
     }
   }, {
     key: 'setExhausted',
     value: function setExhausted() {
-      // this.setFilter(GRAY_FILTER);
-      // this.happy = false;
+      this.setFilter(GRAY_FILTER);
+      this.happy = false;
     }
   }, {
     key: 'resetFilter',
