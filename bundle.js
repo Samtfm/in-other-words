@@ -2363,7 +2363,7 @@ var Word = function () {
     this.frozen = false;
     this.color = TRANSPARENT;
     this.setColor(GREEN, .2, function () {
-      _this.setColorLinear(WHITE, .01);
+      _this.setColorLinear(_this.selected ? YELLOW : WHITE, .01);
     });
 
     var i = 0;
