@@ -2335,7 +2335,7 @@ var TRANSPARENT = new _color2.default(128, 128, 128, 0);
 var BRIGHT_YELLOW = new _color2.default(256, 256, 210, .3);
 var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
 // const GRAY_FILTER = new Color(0,0,0,.4);
-var GRAY_FILTER = new _color2.default(128, 128, 128, .3);
+var GRAY_FILTER = new _color2.default(50, 50, 50, .4);
 
 var WHITE = new _color2.default(230, 230, 230);
 var GREEN = new _color2.default(100, 256, 100);
