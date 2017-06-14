@@ -1056,6 +1056,15 @@ var Thesaurus = function () {
       _this.board.clearUntouched();
       wordField.focus();
     };
+    submitButton.setAttribute("disabled", true);
+    wordField.onkeyup = function (e) {
+      console.log(e.target.value === "");
+      if (e.target.value === "") {
+        submitButton.setAttribute("disabled", true);
+      } else {
+        submitButton.removeAttribute("disabled");
+      }
+    };
     document.addEventListener("fetchRelatedWords", function (e) {
       e.detail.startInflation();
       _this.fetchSynonyms(e.detail, _this.addWords.bind(_this));
