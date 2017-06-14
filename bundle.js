@@ -2191,7 +2191,7 @@ var Board = function () {
     value: function renderAll(ctx) {
       var _this4 = this;
 
-      ctx.fillStyle = 'rgba(0,0,0,0)';
+      ctx.fillStyle = 'rgba(0,0,0,.2)';
       ctx.fillRect(0, 0, this.width, this.height);
       this.words.forEach(function (word) {
         var isNew = _this4.newWords.includes(word);
@@ -2337,7 +2337,7 @@ var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
 // const GRAY_FILTER = new Color(0,0,0,.4);
 var GRAY_FILTER = new _color2.default(50, 50, 50, .4);
 
-var WHITE = new _color2.default(230, 230, 230);
+var WHITE = new _color2.default(246, 246, 246);
 var GREEN = new _color2.default(100, 256, 100);
 
 var Word = function () {
