@@ -2138,7 +2138,7 @@ var Board = function () {
         var word = this.words[i];
         if (word.hitTest(x, y)) {
           word.shortFreeze();
-          word.touch({ forceTouch: true });
+          // word.touch({forceTouch: true});
           var fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
           document.dispatchEvent(fetchEvent);
           break;
