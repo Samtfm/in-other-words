@@ -2443,7 +2443,10 @@ var Word = function () {
       options = options || {};
       if (options.shadow) {
         ctx.shadowColor = 'gray';
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 20;
+      } else {
+        ctx.shadowColor = 'gray';
+        ctx.shadowBlur = 6;
       }
       ctx.fillStyle = this.color.toString();
 
