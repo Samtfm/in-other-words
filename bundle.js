@@ -2354,7 +2354,7 @@ var Word = function () {
     this.width = ctx.measureText(this.text).width + PADDING * 2;
     this.height = 28 + PADDING * 2;
     this.padding = PADDING;
-
+    this.selected = false;
     this.moveTo(x - this.width * 0.1, y - this.height * 0.5);
 
     this.vel = vel;
@@ -2532,9 +2532,8 @@ var Word = function () {
     value: function touch() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-      if (options.forceUntouch) this.selected = true;
-      if (options.forceTouch) this.selected = false;
-
+      // if (options.forceUntouch) this.selected = true;
+      // if (options.forceTouch) this.selected = false;
       if (this.selected) {
         this.setColor(WHITE);
         this.selected = false;
