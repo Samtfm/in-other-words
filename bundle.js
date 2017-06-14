@@ -2191,8 +2191,7 @@ var Board = function () {
     value: function renderAll(ctx) {
       var _this4 = this;
 
-      ctx.fillStyle = 'rgba(0,0,0,.2)';
-      ctx.fillRect(0, 0, this.width, this.height);
+      // ctx.fillStyle='rgba(0,0,0,.2)';
       this.words.forEach(function (word) {
         var isNew = _this4.newWords.includes(word);
         word.render(ctx, { newWord: isNew });

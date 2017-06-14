@@ -18,7 +18,7 @@ body {
   padding: 20px;
   text-align: center;
   /*color: white;*/
-  color: rgb(220,256,220);
+  color: rgb(20,56,20);
   font-family: 'Averia Serif Libre', cursive;
 
 }
@@ -43,7 +43,7 @@ h2 {
 p{
   width: 584px;
   /*background-color: rgba(235,256,225,.6);*/
-  color: rgba(235,256,235,1);
+  /*color: rgba(235,256,235,1);*/
   text-align: center;
   /*margin: 0 auto;*/
   display: inline-block;
@@ -74,12 +74,17 @@ button, input {
   padding: 4px 8px;
   border-radius: 3px;
   margin: 4px;
-  background-color: rgba(235,256,235,.9);
+  /*background-color: rgba(235,256,235,.9);*/
+  background-color: white;
+  box-shadow: 0 0 6px darkgray;
 }
 input[type=text]{
   text-align: center;
   margin-left: 20px;
   width: auto;
+}
+#canvas {
+  background-color: #ccc;
 }
 .enter-word{
   display: flex;
