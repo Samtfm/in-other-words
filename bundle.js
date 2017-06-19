@@ -1066,7 +1066,6 @@ var Thesaurus = function () {
       }
     };
     document.addEventListener("fetchRelatedWords", function (e) {
-      // e.detail.startInflation();
       _this.fetchSynonyms(e.detail, _this.addWords.bind(_this));
     });
     submitButton.onclick = function (e) {
@@ -2103,8 +2102,8 @@ var Board = function () {
       }
       var pos = void 0;
       if (wordObj) {
-        pos = { x: wordObj.pos.x + wordObj.width * .5,
-          y: wordObj.pos.y + wordObj.height * .5 };
+        pos = { x: wordObj.pos.x + wordObj.width,
+          y: wordObj.pos.y + wordObj.height };
       } else {
         pos = { x: this.width * 0.5, y: this.height * 0.5 };
       }
@@ -2529,7 +2528,9 @@ var Word = function () {
     value: function resetSize() {
       if (this.inflation) {
         clearInterval(this.inflation);
+        this.shortFreeze(350);
       }
+
       this.setPadding(PADDING);
     }
   }, {
@@ -2552,10 +2553,12 @@ var Word = function () {
     value: function shortFreeze() {
       var _this7 = this;
 
+      var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 500;
+
       this.frozen = true;
       setTimeout(function () {
         return _this7.frozen = false;
-      }, 500);
+      }, time);
     }
   }, {
     key: 'touch',
