@@ -1066,7 +1066,7 @@ var Thesaurus = function () {
       }
     };
     document.addEventListener("fetchRelatedWords", function (e) {
-      e.detail.startInflation();
+      // e.detail.startInflation();
       _this.fetchSynonyms(e.detail, _this.addWords.bind(_this));
     });
     submitButton.onclick = function (e) {
@@ -2139,29 +2139,41 @@ var Board = function () {
   }, {
     key: 'handleDoubleClick',
     value: function handleDoubleClick(e) {
+      var _this3 = this;
+
       var _getCoords3 = this.getCoords(e),
           x = _getCoords3.x,
           y = _getCoords3.y;
 
-      for (var i = 0; i < this.words.length; i++) {
-        var word = this.words[i];
+      var _loop = function _loop(i) {
+        var word = _this3.words[i];
         if (word.hitTest(x, y)) {
-          word.shortFreeze();
+          // word.shortFreeze();
+          word.frozen = false;
+          word.startInflation();
           // word.touch({forceTouch: true});
-          var fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
-          document.dispatchEvent(fetchEvent);
-          break;
+          setTimeout(function () {
+            var fetchEvent = new CustomEvent('fetchRelatedWords', { 'detail': word });
+            document.dispatchEvent(fetchEvent);
+          }, 200);
+          return 'break';
         }
+      };
+
+      for (var i = 0; i < this.words.length; i++) {
+        var _ret = _loop(i);
+
+        if (_ret === 'break') break;
       }
     }
   }, {
     key: 'updateVelocities',
     value: function updateVelocities() {
-      var _this3 = this;
+      var _this4 = this;
 
       var collisions = [];
       this.words.forEach(function (wordA) {
-        _this3.words.forEach(function (wordB) {
+        _this4.words.forEach(function (wordB) {
           if (wordA !== wordB && wordA.active && wordB.active) {
             var collision = wordA.checkCollision(wordB);
             if (collision) {
@@ -2169,7 +2181,7 @@ var Board = function () {
             }
           }
         });
-        _this3.walls.forEach(function (wall) {
+        _this4.walls.forEach(function (wall) {
           var collision = wordA.checkCollision(wall);
           if (collision) {
             collisions.push(collision);
@@ -2198,11 +2210,11 @@ var Board = function () {
   }, {
     key: 'renderAll',
     value: function renderAll(ctx) {
-      var _this4 = this;
+      var _this5 = this;
 
       // ctx.fillStyle='rgba(0,0,0,.2)';
       this.words.forEach(function (word) {
-        var isNew = _this4.newWords.includes(word);
+        var isNew = _this5.newWords.includes(word);
         word.render(ctx, { newWord: isNew });
       });
       if (this.heldWord) this.heldWord.render(ctx, { shadow: true });
@@ -2343,7 +2355,7 @@ var TRANSPARENT = new _color2.default(128, 128, 128, 0);
 var BRIGHT_YELLOW = new _color2.default(256, 256, 210, .3);
 var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
 // const GRAY_FILTER = new Color(0,0,0,.4);
-var GRAY_FILTER = new _color2.default(50, 50, 50, .4);
+var GRAY_FILTER = new _color2.default(50, 50, 50, .25);
 
 var WHITE = new _color2.default(246, 246, 246);
 var GREEN = new _color2.default(100, 256, 100);
@@ -2449,12 +2461,11 @@ var Word = function () {
     key: 'render',
     value: function render(ctx, options) {
       options = options || {};
+      ctx.shadowColor = '#444';
       if (options.shadow) {
-        ctx.shadowColor = 'gray';
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur = 22;
       } else {
-        ctx.shadowColor = 'gray';
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 7;
       }
       ctx.fillStyle = this.color.toString();
 
@@ -2496,11 +2507,21 @@ var Word = function () {
     value: function startInflation() {
       var _this6 = this;
 
+      var x = this.pos.x;
+      var y = this.pos.y;
       this.inflation = setInterval(function () {
-        if (_this6.padding < 12) {
-          _this6.padding += .3;
-        }
-        _this6.setPadding(_this6.padding);
+        _this6.vel.x = Math.random() > .5 ? 2 * Math.random() + 2 : -2 * Math.random() + 2;
+        _this6.vel.y = Math.random() > .5 ? 2 * Math.random() + 2 : -2 * Math.random() + 2;
+        _this6.pos.y += (y - _this6.pos.y) / 2;
+
+        _this6.pos.x += (x - _this6.pos.x) / 2;
+        // this.vel.x -= x;
+        // this.vel.y += 5*(Math.random()-.5);
+        console.log("HEY");
+        // if (this.padding < 12){
+        //   this.padding += .3;
+        // }
+        // this.setPadding(this.padding);
       }, 40);
     }
   }, {
