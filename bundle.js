@@ -1058,7 +1058,6 @@ var Thesaurus = function () {
     };
     submitButton.setAttribute("disabled", true);
     wordField.onkeyup = function (e) {
-      console.log(e.target.value === "");
       if (e.target.value === "") {
         submitButton.setAttribute("disabled", true);
       } else {
@@ -2516,7 +2515,6 @@ var Word = function () {
         _this6.pos.x += (x - _this6.pos.x) / 2;
         // this.vel.x -= x;
         // this.vel.y += 5*(Math.random()-.5);
-        console.log("HEY");
         // if (this.padding < 12){
         //   this.padding += .3;
         // }
