@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <meta charset="utf-8">
     <title>In Other Words</title>
     <script type="text/javascript" src='bundle.js'></script>
@@ -15,7 +16,7 @@
       <h2>an interactive thesaurus</h2>
 
     </div>
-    <div class="footer">
+    <div class="add-word-ui">
       <button type="button" id="clear-button">Clear</button>
       <form class="enter-word">
         <input type="text" id="word-field" value="">
@@ -24,12 +25,24 @@
       </form>
     </div>
     <div class="instructions" id="instructions">
-
       <p>
         Double click a word to start exploring synonyms.<br>
         Single click a word to highlight/un-highlight. (highlighted words won't clear)<br>
       </p>
     </div>
     <canvas id="canvas" width="300" height="300"></canvas>
+    <div class="footer">
+      <div class="footer-content">
+        <p>Coded by Sam Faber-Manning</p>
+        <div class='links'>
+          <a href="https://github.com/Samtfm">
+            <i class="fa fa-github" aria-hidden="true"></i>GitHub
+            </a>
+          <a href="https://www.linkedin.com/in/sam-faber-manning/">
+            <i class="fa fa-linkedin" aria-hidden="true"></i>LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
