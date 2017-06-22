@@ -1982,12 +1982,12 @@ var Board = function () {
     var verticalMargin = 16;
     var horizontalMargin = 60;
     this.walls = [{ //left
-      pos: { x: -100 + horizontalMargin, y: -400 },
-      width: 100,
+      pos: { x: -500 + horizontalMargin, y: -400 },
+      width: 500,
       height: this.height + 800
     }, { //right
       pos: { x: this.width - horizontalMargin, y: -400 },
-      width: 100,
+      width: 500,
       height: this.height + 800
     }, { //top
       pos: { x: -400, y: -100 + verticalMargin },
