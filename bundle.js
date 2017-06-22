@@ -2453,7 +2453,9 @@ var Word = function () {
   }, {
     key: 'setOld',
     value: function setOld() {
-      this.setColor(WHITE, .1);
+      if (!this.selected) {
+        this.setColor(WHITE, .1);
+      }
     }
   }, {
     key: 'render',
