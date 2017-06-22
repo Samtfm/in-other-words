@@ -2,7 +2,7 @@ html {
   height: 100%;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4790d1+0,1a192b+89,1a192b+100 */
   background: #4790d1; /* Old browsers */
-  background-color: white;
+  background-color: black;
   box-sizing: border-box;
 }
 *,
@@ -108,8 +108,9 @@ h2 {
 
 canvas {
   margin: 0 auto;
+  margin-top: 25px;
   display: block;
-  background-color: rgba(120,120,120,.2);
+  background-color: rgba(120,120,120,.0);
 
 }
 
