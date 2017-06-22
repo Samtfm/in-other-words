@@ -3,6 +3,8 @@ html {
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#4790d1+0,1a192b+89,1a192b+100 */
   background-color: #222;
   box-sizing: border-box;
+  background-image: url(../kitchen_tiles.jpg);
+  background-position: center;
 }
 *,
 *:before,
