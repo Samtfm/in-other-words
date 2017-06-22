@@ -2295,8 +2295,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementById("canvas");
-  canvasEl.width = document.body.clientWidth;
-  canvasEl.height = document.body.clientHeight * .6;
+  // canvasEl.width = document.body.clientWidth;
+  // canvasEl.height = document.body.clientHeight*.6;
   var submitButton = document.getElementById("submit-word");
   var wordField = document.getElementById("word-field");
   var thesaurus = new _thesaurus2.default(submitButton, wordField, canvasEl);

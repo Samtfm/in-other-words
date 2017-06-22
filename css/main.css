@@ -49,7 +49,12 @@ body {
   font-size: 28px;
     font-weight: 700;
     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#75baff+0,1a192b+89,1a192b+100 */
-
+    background-image: url(../fridge.png);
+    background-position: 50%;
+    background-position-y: -320px;
+    /*background-size: cover;*/
+    background-size: 900px;
+    background-repeat: no-repeat;
 }
 
 .title{
@@ -104,6 +109,8 @@ h2 {
 canvas {
   margin: 0 auto;
   display: block;
+  background-color: rgba(120,120,120,.2);
+
 }
 
 .add-word-ui{
@@ -125,9 +132,6 @@ input[type=text]{
   text-align: center;
   margin-left: 20px;
   width: auto;
-}
-#canvas {
-  background-color: #ccc;
 }
 .enter-word{
   display: flex;
