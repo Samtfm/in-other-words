@@ -8,7 +8,7 @@ Inspired by [visuwords](https://visuwords.com/) with the following modifications
 
 # wireframe
 
-![Kiku](docs/wireframe.png)
+![wireframe](docs/wireframe.png)
 
 # Features
 

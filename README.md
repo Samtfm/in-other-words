@@ -4,6 +4,9 @@
 
 In Other Words is a fun tool for brainstorming. Double-click on words to generate synonyms. Use a single-click to highlight your favorites.
 
+![screenshot](docs/screenshot.png)
+
+
 # Tools/Technologies
   - [Big Huge Thesaurus API](https://words.bighugelabs.com/api.php)
   - HTML Canvas
