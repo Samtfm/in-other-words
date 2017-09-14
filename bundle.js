@@ -2352,8 +2352,8 @@ var PADDING = 8;
 
 var YELLOW = new _color2.default(240, 240, 140);
 var TRANSPARENT = new _color2.default(128, 128, 128, 0);
-var BRIGHT_YELLOW = new _color2.default(256, 256, 210, .3);
-var YELLOW_FILTER = new _color2.default(80, 256, 0, 1);
+// const BRIGHT_YELLOW = new Color(256,256,210,.3);
+// const YELLOW_FILTER = new Color(80,256,0,1);
 // const GRAY_FILTER = new Color(0,0,0,.4);
 var GRAY_FILTER = new _color2.default(50, 50, 50, .25);
 
@@ -2462,6 +2462,7 @@ var Word = function () {
   }, {
     key: 'render',
     value: function render(ctx, options) {
+      this.setPadding(PADDING);
       options = options || {};
       ctx.shadowColor = '#444';
       if (options.shadow) {
